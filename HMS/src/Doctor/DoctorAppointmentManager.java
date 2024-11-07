@@ -1,11 +1,13 @@
 package Doctor;
 
+import java.util.ArrayList;
+
 import Appointment.*;
 
 public class DoctorAppointmentManager implements IAppointment {
 
-	private ArrayList<Appoinment> appointments;
-	private ArrayList<ScheduledAppointments> scheduledAppointments;
+	private ArrayList<Appointment> appointments;
+	private ArrayList<ViewScheduledAppointments> scheduledAppointments;
 	private PastAppointmentOutcomeRecord pastOutcomes;
 
 	/**

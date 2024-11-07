@@ -1,5 +1,7 @@
 package Doctor;
 
+import java.util.ArrayList;
+
 import Appointment.*;
 
 public interface IAppointment {

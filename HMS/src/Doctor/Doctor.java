@@ -1,6 +1,10 @@
 package Doctor;
 
 import User.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import Appointment.*;
 import Records.*;
 
@@ -17,8 +21,9 @@ public class Doctor extends User {
 	 * @param gender
 	 * @param age
 	 */
-	public Doctor(String hospitalId, String name, String gender, int age) {
+	public Doctor(String hospitalId, String password, String name, String gender, int age) {
 		// TODO - implement Doctor.Doctor
+		super(hospitalId, password, name, gender, age);
 		throw new UnsupportedOperationException();
 	}
 
@@ -26,19 +31,17 @@ public class Doctor extends User {
 	 * 
 	 * @param apptHandler
 	 */
-	public Doctor(IAppointment apptHandler) {
-		// TODO - implement Doctor.Doctor
-		throw new UnsupportedOperationException();
-	}
+	public void setApptHandler(IAppointment apptHandler) {
+        this.apptHandler = apptHandler;
+    }
 
 	/**
 	 * 
 	 * @param schedule
 	 */
-	public Doctor(Schedule schedule) {
-		// TODO - implement Doctor.Doctor
-		throw new UnsupportedOperationException();
-	}
+	public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
 
 	public List<String> viewPersonalSchedule() {
 		// TODO - implement Doctor.viewPersonalSchedule
@@ -66,7 +69,7 @@ public class Doctor extends User {
 		throw new UnsupportedOperationException();
 	}
 
-	public void toString() {
+	public String toString() {
 		// TODO - implement Doctor.toString
 		throw new UnsupportedOperationException();
 	}

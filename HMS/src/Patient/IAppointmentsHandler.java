@@ -1,5 +1,8 @@
 package Patient;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import Appointment.*;
 
 public interface IAppointmentsHandler {

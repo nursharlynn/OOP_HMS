@@ -1,6 +1,11 @@
 package Patient;
 
 import User.*;
+
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.ArrayList;
+
 import Appointment.*;
 import Records.*;
 
@@ -25,8 +30,11 @@ public class Patient extends User {
 	 * @param emailAddress
 	 * @param bloodType
 	 */
-	public Patient(String hospitalId, String password, LocalDateTime dateOfBirth, String gender, Stromg emailAddress, String bloodType) {
+	public Patient(String hospitalId, String password, LocalDateTime dateOfBirth, String gender, String emailAddress, String bloodType) {
 		// TODO - implement Patient.Patient
+		super(hospitalId, password, bloodType, gender, calculateAge(dateOfBirth)); // calculate age from DOB
+		this.emailAddress = emailAddress;
+        this.bloodType = bloodType;
 		throw new UnsupportedOperationException();
 	}
 
@@ -34,8 +42,9 @@ public class Patient extends User {
 	 * 
 	 * @param schedule
 	 */
-	public Patient(Schedule schedule) {
+	 public void setSchedule(Schedule schedule) {
 		// TODO - implement Patient.Patient
+		this.schedule = schedule;
 		throw new UnsupportedOperationException();
 	}
 
@@ -43,8 +52,9 @@ public class Patient extends User {
 	 * 
 	 * @param apptHandler
 	 */
-	public Patient(IAppointmentsHandler apptHandler) {
+	 public void setApptHandler(IAppointmentsHandler apptHandler) {
 		// TODO - implement Patient.Patient
+		this.apptHandler = apptHandler;
 		throw new UnsupportedOperationException();
 	}
 
@@ -53,7 +63,7 @@ public class Patient extends User {
 		throw new UnsupportedOperationException();
 	}
 
-	public Date getDateofBirth() {
+	public LocalDateTime getDateofBirth() {
 		// TODO - implement Patient.getDateofBirth
 		throw new UnsupportedOperationException();
 	}
@@ -99,5 +109,10 @@ public class Patient extends User {
 		// TODO - implement Patient.viewAvailableSlots
 		throw new UnsupportedOperationException();
 	}
+	
+	// Helper method to calculate age from dateOfBirth
+    private static int calculateAge(LocalDateTime dateOfBirth) {
+        return Period.between(dateOfBirth.toLocalDate(), LocalDateTime.now().toLocalDate()).getYears();
+    }
 
 }

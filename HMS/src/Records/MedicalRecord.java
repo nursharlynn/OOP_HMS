@@ -1,5 +1,9 @@
 package Records;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import Administrator.*;
 import Patient.*;
 
@@ -8,7 +12,6 @@ public class MedicalRecord {
 	private ArrayList<String> diagnoses;
 	private ArrayList<String> treatments;
 	private List<String> prescription;
-	private ViewMedicalRecord viewRecord;
 	private LocalDateTime date;
 
 	public MedicalRecord() {

@@ -1,11 +1,16 @@
 package Pharmacist;
 
 import User.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import Administrator.Medicine;
 import Appointment.*;
 
 public class Pharmacist extends User {
 
-	private ArrayList<Medication> inventory;
+	private ArrayList<Medicine> inventory;
 	private ArrayList<Appointment> appointments;
 
 	/**
@@ -18,6 +23,7 @@ public class Pharmacist extends User {
 	 */
 	public Pharmacist(String hospitalId, String password, String name, String gender, int age) {
 		// TODO - implement Pharmacist.Pharmacist
+		super(hospitalId, password, name, gender, age);
 		throw new UnsupportedOperationException();
 	}
 
@@ -36,7 +42,7 @@ public class Pharmacist extends User {
 		throw new UnsupportedOperationException();
 	}
 
-	public List<Medication> viewInventory() {
+	public List<Medicine> viewInventory() {
 		// TODO - implement Pharmacist.viewInventory
 		throw new UnsupportedOperationException();
 	}
@@ -51,7 +57,7 @@ public class Pharmacist extends User {
 		throw new UnsupportedOperationException();
 	}
 
-	public void toString() {
+	public String toString() {
 		// TODO - implement Pharmacist.toString
 		throw new UnsupportedOperationException();
 	}
