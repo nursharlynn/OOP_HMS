@@ -11,8 +11,8 @@ public class Administrator extends User {
     private ArrayList<Appointment> appointments;
     private IManageStaff staffHandler;
 
-    public Administrator(String hospitalId, String password, String name, String gender, int age) {
-        super(hospitalId, password, name, gender, age);
+    public Administrator(String hospitalId, String password, String name, String gender) {
+        super(hospitalId, password, name, gender);
     }
 
     @Override

@@ -9,12 +9,11 @@ public abstract class User {
     private int age;
     private boolean isFirstLogin;
 
-    public User(String hospitalId, String password, String name, String gender, int age) {
+    public User(String hospitalId, String password, String name, String gender) {
         this.hospitalId = hospitalId;
         this.password = password;
         this.name = name;
         this.gender = gender;
-        this.age = age;
         this.isFirstLogin = true;
     }
 

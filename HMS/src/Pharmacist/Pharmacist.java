@@ -11,8 +11,8 @@ public class Pharmacist extends User {
 	private ArrayList<Medicine> inventory;
 	private ArrayList<Appointment> appointments;
 
-	public Pharmacist(String hospitalId, String password, String name, String gender, int age) {
-		super(hospitalId, password, name, gender, age);
+	public Pharmacist(String hospitalId, String password, String name, String gender) {
+		super(hospitalId, password, name, gender);
 	}
 
 	@Override

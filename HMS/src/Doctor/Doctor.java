@@ -12,8 +12,8 @@ public class Doctor extends User {
     private IAppointment apptHandler;
     private MedicalRecord medicalRecord;
 
-    public Doctor(String hospitalId, String password, String name, String gender, int age) {
-        super(hospitalId, password, name, gender, age);
+    public Doctor(String hospitalId, String password, String name, String gender) {
+        super(hospitalId, password, name, gender);
     }
 
     @Override

@@ -1,81 +1,65 @@
 package Records;
 
+import Administrator.Medicine;
+import Patient.Patient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import Administrator.*;
-import Patient.*;
-
 public class MedicalRecord {
+    private ArrayList<String> diagnoses;
+    private List<String> treatments;
+    private List<Medicine> prescription;
+    private LocalDateTime date;
 
-	private ArrayList<String> diagnoses;
-	private ArrayList<String> treatments;
-	private List<String> prescription;
-	private LocalDateTime date;
+    // Constructor
+    public MedicalRecord() {
+        this.diagnoses = new ArrayList<>();
+        this.treatments = new ArrayList<>();
+        this.prescription = new ArrayList<>();
+    }
 
-	public MedicalRecord() {
-		// TODO - implement MedicalRecord.MedicalRecord
-		throw new UnsupportedOperationException();
-	}
+    // Method to view medical record
+    public void viewMedicalRecord(Patient patient) {
+        System.out.println("--- Patient Medical Record ---");
+        System.out.println("Patient ID: " + patient.getPatientID());
+        System.out.println("Name: " + patient.getName());
+        System.out.println("Date of Birth: " + patient.getDateofBirth());
+        System.out.println("Gender: " + patient.getGender());
+        System.out.println("Contact Information: " + patient.getContact());
+        System.out.println("Blood Type: " + patient.getBloodType());
+        
+        // Display diagnoses
+        System.out.println("\nPast Diagnoses:");
+        if (diagnoses.isEmpty()) {
+            System.out.println("No past diagnoses");
+        } else {
+            for (String diagnosis : diagnoses) {
+                System.out.println("- " + diagnosis);
+            }
+        }
+        
+        // Display treatments
+        System.out.println("\nPast Treatments:");
+        if (treatments.isEmpty()) {
+            System.out.println("No past treatments");
+        } else {
+            for (String treatment : treatments) {
+                System.out.println("- " + treatment);
+            }
+        }
+    }
 
-	public ArrayList<Medicine> getPrescription() {
-		// TODO - implement MedicalRecord.getPrescription
-		throw new UnsupportedOperationException();
-	}
+    // Getters and setters
+    public void addDiagnosis(String diagnosis) {
+        this.diagnoses.add(diagnosis);
+    }
 
-	/**
-	 * 
-	 * @param prescription
-	 */
-	public void setPrescription(List<Medicine> prescription) {
-		// TODO - implement MedicalRecord.setPrescription
-		throw new UnsupportedOperationException();
-	}
+    public void addTreatment(String treatment) {
+        this.treatments.add(treatment);
+    }
 
-	public ArrayList<String> getTreatments() {
-		return this.treatments;
-	}
-
-	/**
-	 * 
-	 * @param treatments
-	 */
-	public void setTreatments(ArrayList<String> treatments) {
-		this.treatments = treatments;
-	}
-
-	public ArrayList<String> getDiagnoses() {
-		return this.diagnoses;
-	}
-
-	/**
-	 * 
-	 * @param diagnoses
-	 */
-	public void setDiagnoses(ArrayList<String> diagnoses) {
-		this.diagnoses = diagnoses;
-	}
-
-	/**
-	 * 
-	 * @param patient
-	 */
-	public void viewMedicalRecord(Patient patient) {
-		// TODO - implement MedicalRecord.viewMedicalRecord
-		throw new UnsupportedOperationException();
-	}
-
-	public LocalDateTime getDate() {
-		return this.date;
-	}
-
-	/**
-	 * 
-	 * @param date
-	 */
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
+    public void setPrescription(List<Medicine> prescription) {
+        this.prescription = prescription;
+    }
 }

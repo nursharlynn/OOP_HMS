@@ -3,30 +3,35 @@ package Patient;
 import Appointment.*;
 import Records.*;
 import User.*;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 
 public class Patient extends User {
 
-    private LocalDateTime dateofBirth;
+    private String dateofBirth;
     private String gender;
     private String contact;
-    private String emailAddress;
     private String bloodType;
     private IAppointmentsHandler apptHandler;
     private ArrayList<ViewScheduledAppointments> scheduledAppointments;
     private MedicalRecord medicalRecord;
     private Schedule schedule;
+    private Scanner scanner;
+    private String name;
+    
 
-    public Patient(String hospitalId, String password, LocalDateTime dateOfBirth, String gender, String emailAddress, String bloodType) {
-        super(hospitalId, password, bloodType, gender, calculateAge(dateOfBirth));
-        this.emailAddress = emailAddress;
-        this.bloodType = bloodType;
+    public Patient(String hospitalId, String password, String name, String dateOfBirth, String gender, String bloodType, String contact) {
+        super(hospitalId, password, name, gender);
+        this.name = name;
         this.dateofBirth = dateOfBirth;
         this.gender = gender;
-        this.contact = emailAddress;
+        this.contact = contact;
+        this.bloodType = bloodType;
+        this.medicalRecord = new MedicalRecord();
+        this.scanner = new Scanner(System.in); 
     }
+    
 
     @Override
     public void displayMenu() {
@@ -46,10 +51,10 @@ public class Patient extends User {
 	public void handleMenuChoice(int choice) {
     switch (choice) {
         case 1:
-            System.out.println("View Medical Record - Not implemented yet");
+            viewMedicalRecord();
             break;
         case 2:
-            System.out.println("Update Personal Information - Not implemented yet");
+            updatePersonalInformation();
             break;
         case 3:
             System.out.println("View Available Appointment Slots - Not implemented yet");
@@ -79,10 +84,10 @@ public class Patient extends User {
 
     // Existing getters and setters with minimal implementation
     public String getName() {
-        return "Patient Name"; // Placeholder
+        return this.name;
     }
 
-    public LocalDateTime getDateofBirth() {
+    public String getDateofBirth() {
         return this.dateofBirth;
     }
 
@@ -98,30 +103,12 @@ public class Patient extends User {
         this.contact = contact;
     }
 
-    public String getEmailAddress() {
-        return this.emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
     public String getPatientID() {
-        return getHospitalId(); // Using hospitalId as patientID
+        return getHospitalId(); 
     }
 
     public String getBloodType() {
         return this.bloodType;
-    }
-
-    // Helper method to calculate age from dateOfBirth
-    private static int calculateAge(LocalDateTime dateOfBirth) {
-        return Period.between(dateOfBirth.toLocalDate(), LocalDateTime.now().toLocalDate()).getYears();
-    }
-
-    // Placeholder methods for other functionalities
-    public void viewAvailableSlots() {
-        System.out.println("View Available Slots - Not implemented");
     }
 
     public void setSchedule(Schedule schedule) {
@@ -131,4 +118,43 @@ public class Patient extends User {
     public void setApptHandler(IAppointmentsHandler apptHandler) {
         this.apptHandler = apptHandler;
     }
+
+    public MedicalRecord getMedicalRecord() {
+        return medicalRecord;
+    }
+
+    // Placeholder methods for other functionalities
+    public void viewAvailableSlots() {
+        System.out.println("View Available Slots - Not implemented");
+    }
+
+    private void viewMedicalRecord() {
+        System.out.println("\n=== View Medical Record ===");
+        if (medicalRecord != null) {
+            medicalRecord.viewMedicalRecord(this);
+        } else {
+            System.out.println("Medical record not available.");
+        }
+    }
+
+    private void updatePersonalInformation() {
+        System.out.println("\n=== Update Personal Information ===");
+        
+        // Current contact information
+        System.out.println("Current Contact: " + this.contact);
+        
+        // Prompt for new contact
+        System.out.print("Enter new contact (press enter to keep current): ");
+        String newContact = scanner.nextLine().trim();
+        
+        if (!newContact.isEmpty()) {
+            this.contact = newContact;
+            System.out.println("Contact updated successfully.");
+        }
+        
+        System.out.println("Personal information update completed.");
+    }
+
+    
+
 }
