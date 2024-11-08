@@ -68,7 +68,7 @@ public class Patient extends User {
             apptHandler.rescheduleAppointments(getHospitalId());
             break;
         case 6:
-            System.out.println("Cancel an Appointment - Not implemented yet");
+            apptHandler.cancelAppointment(getHospitalId());
             break;
         case 7:
             System.out.println("View Scheduled Appointments - Not implemented yet");
@@ -123,11 +123,6 @@ public class Patient extends User {
 
     public MedicalRecord getMedicalRecord() {
         return medicalRecord;
-    }
-
-    // Placeholder methods for other functionalities
-    public void viewAvailableSlots() {
-        System.out.println("View Available Slots - Not implemented");
     }
 
     private void viewMedicalRecord() {

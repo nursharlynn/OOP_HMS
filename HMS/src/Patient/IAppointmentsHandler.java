@@ -24,7 +24,7 @@ public interface IAppointmentsHandler {
 	 * 
 	 * @param AppointmentsID
 	 */
-	boolean cancelAppointments(int AppointmentsID);
+	void cancelAppointment(String hospitalId);
 
 	/**
 	 * 
