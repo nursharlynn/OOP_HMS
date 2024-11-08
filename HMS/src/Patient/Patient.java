@@ -71,7 +71,7 @@ public class Patient extends User {
             apptHandler.cancelAppointment(getHospitalId());
             break;
         case 7:
-            System.out.println("View Scheduled Appointments - Not implemented yet");
+            apptHandler.viewScheduledAppointments(getHospitalId());
             break;
         case 8:
             System.out.println("View Past Appointment Outcome Records - Not implemented yet");

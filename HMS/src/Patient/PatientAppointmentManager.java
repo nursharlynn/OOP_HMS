@@ -16,7 +16,7 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
 
 	private PastAppointmentOutcomeRecord pastOutcomes;
 	private static final String APPOINTMENTS_FILE = "data/Appointments.csv";
-	private Scanner scanner;
+    private Scanner scanner;
 	private ArrayList<Appointment> Appointments;
 
 	public PatientAppointmentManager() {
@@ -33,68 +33,83 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
 	 */
 
 
-	 @Override
-	 public void rescheduleAppointments(String hospitalId) {
-		 try {
-			 Path path = Paths.get(APPOINTMENTS_FILE);
-			 List<String> lines = Files.readAllLines(path);
-			 
-			 List<String[]> patientBookedAppointments = lines.stream()
-				 .skip(1) // Skip header
-				 .map(line -> line.split(","))
-				 .filter(data -> 
-					 data.length > 5 && 
-					 data[4].trim().equalsIgnoreCase("Booked") && 
-					 data[5].trim().equals(hospitalId)
-				 )
-				 .collect(Collectors.toList());
-			 
-			 if (patientBookedAppointments.isEmpty()) {
-				 System.out.println("No booked appointments found.");
-				 return;
-			 }
- 
-			 System.out.println("\n=== Your Current Booked Appointments ===");
-			 for (int i = 0; i < patientBookedAppointments.size(); i++) {
-				 String[] appointment = patientBookedAppointments.get(i);
-				 System.out.printf("%d. Doctor: %s, Date: %s, Time: %s%n", 
-					 i + 1, appointment[1], appointment[2], appointment[3]);
-			 }
- 
-			 System.out.print("\nEnter the number of the appointment you want to reschedule: ");
-			 int appointmentChoice = scanner.nextInt();
-			 scanner.nextLine(); // Consume newline
-			 
-			 if (appointmentChoice < 1 || appointmentChoice > patientBookedAppointments.size()) {
-				 System.out.println("Invalid appointment selection.");
-				 return;
-			 }
- 
-			 String[] currentAppointment = patientBookedAppointments.get(appointmentChoice - 1);
-			 int currentAppointmentId = Integer.parseInt(currentAppointment[0]);
- 
-			 System.out.println("\nSelect a new appointment to reschedule your current appointment.");
-			 
-			 List<String[]> availableAppointments = viewAvailableSlots();
-			 
-			 if (availableAppointments.isEmpty()) {
-				 System.out.println("No available appointments to reschedule.");
-				 return;
-			 }
- 
-			 System.out.print("Enter the Appointment ID you want to book: ");
-			 int newAppointmentId = scanner.nextInt();
-			 scanner.nextLine(); // Consume newline
- 
-			 performRescheduling(currentAppointmentId, newAppointmentId, hospitalId);
- 
-		 } catch (IOException e) {
-			 System.out.println("Error occurred while rescheduling appointment.");
-			 e.printStackTrace();
-		 }
-	 }
+	 private List<String[]> getPatientBookedAppointments(String hospitalId) throws IOException {
+        Path path = Paths.get(APPOINTMENTS_FILE);
+        List<String> lines = Files.readAllLines(path);
+        
+        return lines.stream()
+            .skip(1) // Skip header
+            .map(line -> line.split(","))
+            .filter(data -> 
+                data.length > 5 && 
+                data[4].trim().equalsIgnoreCase("Booked") && 
+                data[5].trim().equals(hospitalId)
+            )
+            .collect(Collectors.toList());
+    }
 
-	 private void performRescheduling(int currentAppointmentId, int newAppointmentId, String hospitalId) throws IOException {
+	private int displayBookedAppointments(List<String[]> patientBookedAppointments) {
+        if (patientBookedAppointments.isEmpty()) {
+            System.out.println("No booked appointments found.");
+            return -1;
+        }
+
+        System.out.println("\n=== Your Current Booked Appointments ===");
+        for (int i = 0; i < patientBookedAppointments.size(); i++) {
+            String[] appointment = patientBookedAppointments.get(i);
+            System.out.printf("%d. Doctor: %s, Date: %s, Time: %s%n", 
+                i + 1, appointment[1], appointment[2], appointment[3]);
+        }
+
+        System.out.print("\nEnter the number of the appointment: ");
+        int appointmentChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        
+        if (appointmentChoice < 1 || appointmentChoice > patientBookedAppointments.size()) {
+            System.out.println("Invalid appointment selection.");
+            return -1;
+        }
+
+        return appointmentChoice;
+    }
+
+	@Override
+    public void rescheduleAppointments(String hospitalId) {
+        try {
+            // Get booked appointments
+            List<String[]> patientBookedAppointments = getPatientBookedAppointments(hospitalId);
+            
+            // Display and get selected appointment
+            int appointmentChoice = displayBookedAppointments(patientBookedAppointments);
+            if (appointmentChoice == -1) return;
+
+            // Get current appointment details
+            String[] currentAppointment = patientBookedAppointments.get(appointmentChoice - 1);
+            int currentAppointmentId = Integer.parseInt(currentAppointment[0]);
+
+            System.out.println("\nSelect a new appointment to reschedule your current appointment.");
+            
+            // View available slots
+            List<String[]> availableAppointments = viewAvailableSlots();
+            
+            if (availableAppointments.isEmpty()) {
+                System.out.println("No available appointments to reschedule.");
+                return;
+            }
+
+            System.out.print("Enter the Appointment ID you want to book: ");
+            int newAppointmentId = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            performRescheduling(currentAppointmentId, newAppointmentId, hospitalId);
+
+        } catch (IOException e) {
+            System.out.println("Error occurred while rescheduling appointment.");
+            e.printStackTrace();
+        }
+    }
+
+	private void performRescheduling(int currentAppointmentId, int newAppointmentId, String hospitalId) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(APPOINTMENTS_FILE));
         
         boolean currentAppointmentFound = false;
@@ -131,88 +146,60 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
         System.out.println("Appointment successfully rescheduled.");
     }
 
-	public void cancelAppointment(String hospitalId) {
-		try {
-			Path path = Paths.get(APPOINTMENTS_FILE);
-			List<String> lines = Files.readAllLines(path);
-			
-			// Find patient's booked appointments
-			List<String[]> patientBookedAppointments = lines.stream()
-				.skip(1) // Skip header
-				.map(line -> line.split(","))
-				.filter(data -> 
-					data.length > 5 && 
-					data[4].trim().equalsIgnoreCase("Booked") && 
-					data[5].trim().equals(hospitalId)
-				)
-				.collect(Collectors.toList());
-			
-			// Check if patient has any booked appointments
-			if (patientBookedAppointments.isEmpty()) {
-				System.out.println("No booked appointments found.");
-				return;
-			}
+	@Override
+    public void cancelAppointment(String hospitalId) {
+        try {
+            // Get booked appointments
+            List<String[]> patientBookedAppointments = getPatientBookedAppointments(hospitalId);
+            
+            // Display and get selected appointment
+            int appointmentChoice = displayBookedAppointments(patientBookedAppointments);
+            if (appointmentChoice == -1) return;
+
+            // Get appointment details to cancel
+            String[] appointmentToCancel = patientBookedAppointments.get(appointmentChoice - 1);
+            int appointmentId = Integer.parseInt(appointmentToCancel[0]);
+
+            // Perform cancellation
+            performCancellation(appointmentId, hospitalId);
+
+        } catch (IOException e) {
+            System.out.println("Error occurred while canceling appointment.");
+            e.printStackTrace();
+        }
+    }
 	
-			// Display booked appointments
-			System.out.println("\n=== Your Current Booked Appointments ===");
-			for (int i = 0; i < patientBookedAppointments.size(); i++) {
-				String[] appointment = patientBookedAppointments.get(i);
-				System.out.printf("%d. Doctor: %s, Date: %s, Time: %s%n", 
-					i + 1, appointment[1], appointment[2], appointment[3]);
-			}
-	
-			// Prompt for appointment to cancel
-			System.out.print("\nEnter the number of the appointment you want to cancel: ");
-			int appointmentChoice = scanner.nextInt();
-			scanner.nextLine(); // Consume newline
-			
-			if (appointmentChoice < 1 || appointmentChoice > patientBookedAppointments.size()) {
-				System.out.println("Invalid appointment selection.");
-				return;
-			}
-	
-			// Get the appointment details to cancel
-			String[] appointmentToCancel = patientBookedAppointments.get(appointmentChoice - 1);
-			int appointmentId = Integer.parseInt(appointmentToCancel[0]);
-	
-			// Perform cancellation
-			performCancellation(appointmentId, hospitalId, lines);
-	
-		} catch (IOException e) {
-			System.out.println("Error occurred while canceling appointment.");
-			e.printStackTrace();
-		}
-	}
-	
-	private void performCancellation(int appointmentId, String hospitalId, List<String> lines) throws IOException {
-		boolean appointmentFound = false;
-		
-		for (int i = 1; i < lines.size(); i++) {
-			String[] data = lines.get(i).split(",");
-			
-			// Find the specific booked appointment
-			if (Integer.parseInt(data[0]) == appointmentId && 
-				data.length > 5 && 
-				data[4].trim().equalsIgnoreCase("Booked") && 
-				data[5].trim().equals(hospitalId)) {
-				
-				// Change the status back to Available
-				lines.set(i, String.format("%s,%s,%s,%s,Available,", 
-					data[0], data[1], data[2], data[3]));
-				
-				appointmentFound = true;
-				break;
-			}
-		}
-		
-		if (appointmentFound) {
-			// Write the updated lines back to the file
-			Files.write(Paths.get(APPOINTMENTS_FILE), lines);
-			System.out.println("Appointment successfully canceled.");
-		} else {
-			System.out.println("Unable to cancel the appointment.");
-		}
-	}
+	private void performCancellation(int appointmentId, String hospitalId) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get(APPOINTMENTS_FILE));
+        
+        boolean appointmentFound = false;
+        
+        for (int i = 1; i < lines.size(); i++) {
+            String[] data = lines.get(i).split(",");
+            
+            // Find the specific booked appointment
+            if (Integer.parseInt(data[0]) == appointmentId && 
+                data.length > 5 && 
+                data[4].trim().equalsIgnoreCase("Booked") && 
+                data[5].trim().equals(hospitalId)) {
+                
+                // Change the status back to Available
+                lines.set(i, String.format("%s,%s,%s,%s,Available,", 
+                    data[0], data[1], data[2], data[3]));
+                
+                appointmentFound = true;
+                break;
+            }
+        }
+        
+        if (appointmentFound) {
+            // Write the updated lines back to the file
+            Files.write(Paths.get(APPOINTMENTS_FILE), lines);
+            System.out.println("Appointment successfully canceled.");
+        } else {
+            System.out.println("Unable to cancel the appointment.");
+        }
+    }
 
 	/**
 	 * 
@@ -284,5 +271,41 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
         
         return availableAppointments;
     }
-}
 
+	public void viewScheduledAppointments(String hospitalId) {
+		try {
+			Path path = Paths.get(APPOINTMENTS_FILE);
+			List<String> lines = Files.readAllLines(path);
+			
+			// Filter appointments for the specific patient
+			List<String[]> patientAppointments = lines.stream()
+				.skip(1) // Skip header
+				.map(line -> line.split(","))
+				.filter(data -> 
+					data.length > 5 && 
+					data[5].trim().equals(hospitalId
+				))
+				.collect(Collectors.toList());
+			
+			// Check if patient has any scheduled appointments
+			if (patientAppointments.isEmpty()) {
+				System.out.println("No scheduled appointments found.");
+				return;
+			}
+	
+			// Display the scheduled appointments
+			System.out.println("\n=== Your Scheduled Appointments ===");
+			System.out.printf("%-10s %-20s %-15s %-15s %-15s%n", 
+				"Appt ID", "Doctor Name", "Date", "Time", "Status");
+			System.out.println("-".repeat(75));
+	
+			for (String[] appointment : patientAppointments) {
+				System.out.printf("%-10s %-20s %-15s %-15s %-15s%n", 
+					appointment[0], appointment[1], appointment[2], appointment[3], appointment[4]);
+			}
+		} catch (IOException e) {
+			System.out.println("Error occurred while retrieving scheduled appointments.");
+			e.printStackTrace();
+		}
+	}
+}

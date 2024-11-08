@@ -34,6 +34,7 @@ public interface IAppointmentsHandler {
 
 	List<String[]> viewAvailableSlots();
 
+	void viewScheduledAppointments(String hospitalId);
 	
 
 }
