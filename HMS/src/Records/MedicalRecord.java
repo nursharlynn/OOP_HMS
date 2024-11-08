@@ -29,25 +29,11 @@ public class MedicalRecord {
         System.out.println("Contact Information: " + patient.getContact());
         System.out.println("Blood Type: " + patient.getBloodType());
         
-        // Display diagnoses
-        System.out.println("\nPast Diagnoses:");
-        if (diagnoses.isEmpty()) {
-            System.out.println("No past diagnoses");
-        } else {
-            for (String diagnosis : diagnoses) {
-                System.out.println("- " + diagnosis);
-            }
-        }
-        
-        // Display treatments
-        System.out.println("\nPast Treatments:");
-        if (treatments.isEmpty()) {
-            System.out.println("No past treatments");
-        } else {
-            for (String treatment : treatments) {
-                System.out.println("- " + treatment);
-            }
-        }
+        // Display current diagnosis and treatment
+        System.out.println("\nCurrent Diagnosis: " + 
+            (patient.getDiagnosis().isEmpty() ? "No current diagnosis" : patient.getDiagnosis()));
+        System.out.println("Current Treatment: " + 
+            (patient.getTreatment().isEmpty() ? "No current treatment" : patient.getTreatment()));
     }
 
     // Getters and setters

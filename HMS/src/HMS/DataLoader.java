@@ -80,7 +80,7 @@ public class DataLoader {
             br.readLine();
             
             while ((line = br.readLine()) != null) {
-                // Split by tab
+                // Split by comma
                 String[] data = line.split(",");
                 String patientId = data[0].trim();
                 String name = data[1].trim();
@@ -88,11 +88,22 @@ public class DataLoader {
                 String gender = data[3].trim();
                 String bloodType = data[4].trim();
                 String contact = data[5].trim();
-    
-                // Update the date parsing to handle different formats
+                
+                // Check if diagnosis and treatment columns exist
+                String diagnosis = data.length > 6 ? data[6].trim() : "";
+                String treatment = data.length > 7 ? data[7].trim() : "";
+                
+                // Create patient with additional medical information
                 Patient patient = new Patient(patientId, "password", name, dateOfBirth, gender, bloodType, contact);
+                
+                // If you have a method to set diagnosis and treatment in Patient class
+                patient.setDiagnosis(diagnosis);
+                patient.setTreatment(treatment);
+                
                 loginSystem.addUser(patient);
-                System.out.println("Added patient: " + name);
+                System.out.println("Added patient: " + name + 
+                                   " (Diagnosis: " + diagnosis + 
+                                   ", Treatment: " + treatment + ")");
             }
         } catch (IOException e) {
             System.err.println("Error reading patient file: " + e.getMessage());

@@ -234,20 +234,22 @@ public void viewPastAppointmentOutcomeRecords(String patientId) {
         
         // Display the outcomes
         System.out.println("\n=== Your Past Appointment Outcome Records ===");
-        System.out.printf("%-15s %-20s %-15s %-15s %-20s %-30s %-30s %-30s%n", 
-            "Appointment ID", "Doctor Name", "Patient ID", "Patient Name", "Date", "Services Provided", "Prescribed Medications", "Consultation Notes");
+        System.out.printf("%-10s %-15s %-15s %-15s %-20s %-25s %-30s %-30s %-15s%n", 
+            "RecordID", "Doctor Name", "Patient ID", "Patient Name", "Date", 
+            "Services Provided", "Prescribed Medications", "Consultation Notes", "Status");
         System.out.println("-".repeat(200));
         
         for (String[] outcome : patientOutcomes) {
-            System.out.printf("%-15s %-20s %-15s %-15s %-20s %-30s %-30s %-30s%n", 
-                outcome[0], // Appointment ID
-                outcome[1], // Doctor Name
-                outcome[2], // Patient ID
-                outcome[3], // Patient Name
-                outcome[4], // Date
-                outcome[5], // Services Provided
-                outcome[6], // Prescribed Medications
-                outcome.length > 7 ? outcome[7] : "N/A" // Consultation Notes (assuming it's the 8th column)
+            System.out.printf("%-10s %-15s %-15s %-15s %-20s %-25s %-30s %-30s %-15s%n", 
+                outcome[0],  // RecordID
+                outcome[1],  // Doctor Name
+                outcome[2],  // Patient ID
+                outcome[3],  // Patient Name
+                outcome[4],  // Date
+                outcome[5],  // Services Provided
+                outcome[6],  // Prescribed Medications
+                outcome.length > 7 ? outcome[7] : "N/A",  // Consultation Notes
+                outcome.length > 8 ? outcome[8] : "Pending"  // Status
             );
         }
         

@@ -2,6 +2,7 @@ package Doctor;
 
 import Appointment.*;
 import HMS.DataLoader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +10,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -167,24 +167,23 @@ public class DoctorAppointmentManager implements IAppointment {
 	 */
 	public void recordAppointmentOutcome(Doctor doctor) {
 		try {
-			// Read appointments file
+			// Read available medicines
 			List<String> availableMedicines = DataLoader.readAvailableMedicines();
-
-        	// Read appointments file
-        	Path path = Paths.get("data/Appointments.csv");
-        	List<String> lines = Files.readAllLines(path);
-        
-        	// Find confirmed appointments for this specific doctor
-        	List<String[]> confirmedAppointments = lines.stream()
-            	.skip(1) // Skip header
-            	.map(line -> line.split(","))
-            	.filter(data -> 
-                	data.length > 4 && 
-                	data[1].trim().equalsIgnoreCase(doctor.getName()) && // Match doctor's name
-                	data[4].trim().equalsIgnoreCase("Confirmed") // Only confirmed appointments
-            )
-            .collect(Collectors.toList());
-
+	
+			// Read appointments file
+			Path path = Paths.get("data/Appointments.csv");
+			List<String> lines = Files.readAllLines(path);
+			
+			// Find confirmed appointments for this specific doctor
+			List<String[]> confirmedAppointments = lines.stream()
+				.skip(1) // Skip header
+				.map(line -> line.split(","))
+				.filter(data -> 
+					data.length > 4 && 
+					data[1].trim().equalsIgnoreCase(doctor.getName()) && // Match doctor's name
+					data[4].trim().equalsIgnoreCase("Confirmed") // Only confirmed appointments
+				)
+				.collect(Collectors.toList());
 			
 			// Display confirmed appointments
 			System.out.println("\n=== Your Confirmed Appointments ===");
@@ -205,7 +204,6 @@ public class DoctorAppointmentManager implements IAppointment {
 			}
 			
 			// Prompt for appointment selection
-			Scanner scanner = new Scanner(System.in);
 			System.out.println("\nEnter the number of the appointment to record outcome");
 			System.out.println("Enter 0 to cancel");
 			
@@ -224,30 +222,10 @@ public class DoctorAppointmentManager implements IAppointment {
 				return;
 			}
 			
-			// Get the selected appointment ID
-			int selectedAppointmentId = Integer.parseInt(confirmedAppointments.get(choice - 1)[0]);
+			// Get the selected appointment details
+			String[] selectedAppointment = confirmedAppointments.get(choice - 1);
 			
-			// Find the specific appointment
-			Optional<String[]> appointmentData = lines.stream()
-				.skip(1)
-				.map(line -> line.split(","))
-				.filter(data -> 
-					data[0].trim ().equals(String.valueOf(selectedAppointmentId)) && 
-					data[1].trim().equalsIgnoreCase(doctor.getName())
-				)
-				.findFirst();
-			
-			if (!appointmentData.isPresent()) {
-				System.out.println("Appointment not found.");
-				return;
-			}
-			
-			// Get patient ID and name from the appointment data
-			String patientId = appointmentData.get()[5]; // Patient ID
-			String patientName = appointmentData.get()[6]; // Patient Name
-			
-			// Rest of the existing recordAppointmentOutcome method...
-			// Get services provided
+			// Prepare outcome details
 			System.out.print("Enter services provided (e.g., consultation, X-ray, blood test): ");
 			String servicesProvided = scanner.nextLine();
 			
@@ -284,16 +262,16 @@ public class DoctorAppointmentManager implements IAppointment {
 			System.out.print("Enter consultation notes: ");
 			String consultationNotes = scanner.nextLine();
 			
-			// Write to AppointmentOutcomes.csv with patient ID and name
+			// Write to AppointmentOutcomes.csv
 			writeAppointmentOutcome(
-				selectedAppointmentId, 
+				Integer.parseInt(selectedAppointment[0]), // Appointment ID
 				doctor.getName(), 
-				appointmentData.get()[2], // Date
+				selectedAppointment[2], // Date
 				servicesProvided, 
 				prescribedMedications, 
 				consultationNotes,
-				patientId,
-				patientName
+				selectedAppointment[5], // Patient ID
+				selectedAppointment[6]  // Patient Name
 			);
 			
 			System.out.println("Appointment outcome recorded successfully!");
@@ -304,11 +282,8 @@ public class DoctorAppointmentManager implements IAppointment {
 		}
 	}
 
-private List<String> readAvailableMedicines() throws IOException {
-    return DataLoader.readAvailableMedicines();
-}
 
-private void writeAppointmentOutcome(
+	private void writeAppointmentOutcome(
     int appointmentId, 
     String doctorName, 
     String date, 
@@ -320,30 +295,45 @@ private void writeAppointmentOutcome(
 ) throws IOException {
     Path outcomePath = Paths.get("data/AppointmentOutcomes.csv");
     
-    // Create file with header if it doesn't exist
-    if (!Files.exists(outcomePath)) {
-        Files.createFile(outcomePath);
-        Files.write(outcomePath, "AppointmentID,DoctorName,PatientID,PatientName,Date,ServicesProvided,PrescribedMedications,ConsultationNotes\n".getBytes(), StandardOpenOption.APPEND);
-    }
+    // Get next appointment ID
+    int recordId = Doctor.getNextAppointmentId(outcomePath);
+
     
     // Prepare the outcome line
     String prescriptionString = prescribedMedications.isEmpty() ? 
         "None" : String.join("|", prescribedMedications);
     
-    String outcomeLine = String.format("%d,%s,%s,%s,%s,%s,%s,%s\n", 
-        appointmentId, 
-        doctorName, 
-        patientId,
-        patientName,
-        date, 
-        servicesProvided, 
-        prescriptionString, 
-        consultationNotes.replace(",", ";") // Prevent CSV parsing issues
-    );
-    
-    // Append to file
-    Files.write(outcomePath, outcomeLine.getBytes(), StandardOpenOption.APPEND);
+    try {
+        // Ensure file exists and has header
+        if (!Files.exists(outcomePath)) {
+            Files.createDirectories(outcomePath.getParent());
+            try (BufferedWriter initialWriter = Files.newBufferedWriter(outcomePath)) {
+                initialWriter.write("RecordID,DoctorName,PatientID,PatientName,Date,Service,PrescribedMedications,ConsultationNotes,Status");
+                initialWriter.newLine();
+            }
+        }
+        
+        // Append new outcome
+        try (BufferedWriter writer = Files.newBufferedWriter(outcomePath, StandardOpenOption.APPEND)) {
+            writer.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,Pending", 
+                recordId, 
+                doctorName, 
+                patientId,
+                patientName,
+                date, 
+                servicesProvided, 
+                prescriptionString, 
+                consultationNotes.replace(",", ";")
+            ));
+            writer.newLine();
+        }
+    } catch (IOException e) {
+        System.out.println("Error writing appointment outcome: " + e.getMessage());
+        throw e;
+    }
 }
+	
+
 
 	/**
 	 * 
@@ -455,5 +445,7 @@ private void writeAppointmentOutcome(
 			return new ArrayList<>();
 		}
 	}
+
+	
 
 }

@@ -1,3 +1,2 @@
-RecordID,DoctorName,PatientID,PatientName,Date,Service,prescribed medications,consultation notes
-1,John Smith,P1001,Alice Brown,12/12/2025,consultation,Paracetamol:1|Ibuprofen:1,getting better
-2,John Smith,P1002,Bob Stone,12/12/2025,blood test,Paracetamol:1|Ibuprofen:1,all good
+RecordID,DoctorName,PatientID,PatientName,Date,Service,prescribed medications,consultation notes,Status
+1,John Smith,P1001,Alice Brown,12/12/2025,consultation,Paracetamol:1,good,Pending

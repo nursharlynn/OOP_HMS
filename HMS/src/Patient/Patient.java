@@ -20,6 +20,9 @@ public class Patient extends User {
     private Schedule schedule;
     private Scanner scanner;
     private String name;
+    private String diagnosis = "";
+    private String treatment = "";
+
     
 
     public Patient(String hospitalId, String password, String name, String dateOfBirth, String gender, String bloodType, String contact) {
@@ -113,6 +116,22 @@ public class Patient extends User {
         return this.bloodType;
     }
 
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public void setTreatment(String treatment) {
+        this.treatment = treatment;
+    }
+
+    public String getDiagnosis() {
+        return this.diagnosis;
+    }
+
+    public String getTreatment() {
+        return this.treatment;
+    }
+
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
@@ -132,6 +151,13 @@ public class Patient extends User {
         } else {
             System.out.println("Medical record not available.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + 
+               "\nDiagnosis: " + diagnosis + 
+               "\nTreatment: " + treatment;
     }
 
     private void updatePersonalInformation() {
