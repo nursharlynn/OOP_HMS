@@ -42,9 +42,10 @@ public class DataLoader {
                 String name = data[1].trim();
                 String role = data[2].trim();
                 String gender = data[3].trim();
+                int age = Integer.parseInt(data[4].trim()); // Parse age
     
                 // Create user based on role with default password "password"
-                User user = createUserByRole(staffId, name, role, gender);
+                User user = createUserByRole(staffId, name, role, gender, age);
                 if (user != null) {
                     loginSystem.addUser(user);
                     System.out.println("Added user: " + name + " (" + role + ")");
@@ -56,22 +57,19 @@ public class DataLoader {
     
 }
 
-    private User createUserByRole(String staffId, String name, String role, String gender) {
-        switch (role.toLowerCase()) {
-            case "doctor":
-                return new Doctor(staffId, "password", name, gender);
-                
-            case "pharmacist":
-                return new Pharmacist(staffId, "password", name, gender);
-                
-            case "administrator":
-                return new Administrator(staffId, "password", name, gender);
-                
-            default:
-                System.out.println("Unknown role: " + role);
-                return null;
-        }
+public User createUserByRole(String staffId, String name, String role, String gender, int age) {
+    switch (role.toLowerCase()) {
+        case "doctor":
+            return new Doctor(staffId, "password", name, gender, age);
+        case "pharmacist":
+            return new Pharmacist(staffId, "password", name, gender, age);
+        case "administrator":
+            return new Administrator(staffId, "password", name, gender, age);
+        default:
+            System.out.println("Unknown role: " + role);
+            return null;
     }
+}
 
     private void loadPatientData() {
         try (BufferedReader br = new BufferedReader(new FileReader(patientFilePath))) {
@@ -179,4 +177,55 @@ public class DataLoader {
             System.err.println("Error saving medicines: " + e.getMessage());
         }
     }
+
+
+    public void saveStaffList(List<User> staffList) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(staffFilePath))) {
+            writer.write("Staff ID,Name,Role,Gender,Age\n"); // Write header
+            for (User  staff : staffList) {
+                writer.write(String.format("%s,%s,%s,%s,%d%n", 
+                    staff.getHospitalId(), 
+                    staff.getName(), 
+                    staff.getRole(), // Make sure this is set in the subclasses
+                    staff.getGender(), 
+                    staff.getAge()));
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving staff list: " + e.getMessage());
+        }
+    }
+
+    public List<User> getAllStaff() {
+        List<User> staffList = new ArrayList<>();
+        String staffFilePath = "data/Staff_List.csv"; // Path to the staff CSV file
+    
+        try (BufferedReader br = new BufferedReader(new FileReader(staffFilePath))) {
+            String line;
+            // Skip the header line
+            br.readLine();
+    
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(","); // Split the line by commas
+                if (data.length < 5) continue; // Ensure there are enough columns
+    
+                String staffId = data[0].trim();
+                String name = data[1].trim();
+                String role = data[2].trim();
+                String gender = data[3].trim();
+                int age = Integer.parseInt(data[4].trim()); // Parse age
+    
+                // Create a User object based on the role
+                User user = createUserByRole(staffId, name, role, gender, age);
+                if (user != null) {
+                    staffList.add(user); // Add the user to the staff list
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading staff file: " + e.getMessage());
+        }
+    
+        return staffList;
+    }
 }
+    
+    

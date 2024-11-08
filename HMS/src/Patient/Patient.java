@@ -26,7 +26,7 @@ public class Patient extends User {
     
 
     public Patient(String hospitalId, String password, String name, String dateOfBirth, String gender, String bloodType, String contact) {
-        super(hospitalId, password, name, gender);
+        super(hospitalId, password, name, gender, "Patient");
         this.name = name;
         this.dateofBirth = dateOfBirth;
         this.gender = gender;

@@ -24,11 +24,13 @@ public class Doctor extends User {
     private IAppointment apptHandler;
     private MedicalRecord medicalRecord;
     private Scanner scanner;
+    private int age;
 
-    public Doctor(String hospitalId, String password, String name, String gender) {
-        super(hospitalId, password, name, gender);
+    public Doctor(String hospitalId, String password, String name, String gender, int age) {
+        super(hospitalId, password, name, gender, "Doctor");
         this.scanner = new Scanner(System.in);
         this.apptHandler = new DoctorAppointmentManager();
+        this.age = age;
     }
 
     @Override

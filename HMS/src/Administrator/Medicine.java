@@ -69,4 +69,8 @@ public class Medicine {
             this.stock += quantity;
         }
     }
+
+    public String getName(){
+        return this.medicineName;
+    }
 }

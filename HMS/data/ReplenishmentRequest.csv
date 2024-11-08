@@ -1,2 +1,3 @@
 ReplenishmentID,Medicine,RequestAmount,PharmacistID,Pharmacist,Status
-1,Test,5,P001,Mark Lee,Pending Approval
+1,Test,5,P001,Mark Lee,Approved
+2,Paracetamol,10,P001,Mark Lee,Approved

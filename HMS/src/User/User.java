@@ -9,12 +9,12 @@ public abstract class User {
     private int age;
     private boolean isFirstLogin;
 
-    public User(String hospitalId, String password, String name, String gender) {
+    public User(String hospitalId, String password, String name, String gender, String role) {
         this.hospitalId = hospitalId;
         this.password = password;
         this.name = name;
         this.gender = gender;
-        this.isFirstLogin = true;
+        this.role = role; // Set the role
     }
 
     // Getters
@@ -49,4 +49,22 @@ public abstract class User {
     public String toString() {
         return "User: " + name + " (ID: " + hospitalId + ", Role: " + role + ")";
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRole(String role){
+        this.role = role;
+    }
+
+    public void setGender(String gender){
+        this.gender = gender;
+    }
+
+    public void setAge(int age){
+        this.age = age;
+    }
+
+    
 }
