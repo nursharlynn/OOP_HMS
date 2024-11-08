@@ -8,7 +8,11 @@ import Pharmacist.Pharmacist;
 import User.LoginSystem;
 import User.User;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataLoader {
     private LoginSystem loginSystem;
@@ -114,6 +118,19 @@ public class DataLoader {
             }
         } catch (IOException e) {
             System.err.println("Error reading medicine file: " + e.getMessage());
+        }
+    }
+
+    public static List<String> readAvailableMedicines() {
+        try {
+            Path medicinePath = Paths.get("data/Medicine_List.csv");
+            return Files.lines(medicinePath)
+                .skip(1) // Skip header
+                .map(line -> line.split(",")[0].trim())
+                .collect(Collectors.toList());
+        } catch (IOException e) {
+            System.err.println("Error reading medicine file: " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 }

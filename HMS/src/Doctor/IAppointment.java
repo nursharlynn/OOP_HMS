@@ -16,7 +16,7 @@ public interface IAppointment {
 	 * @param doctor
 	 * @param appointmentId
 	 */
-	void recordAppointmentOutcome(Doctor doctor, int appointmentId);
+	void recordAppointmentOutcome(Doctor doctor);
 
 	/**
 	 * 

@@ -74,7 +74,7 @@ public class Patient extends User {
             apptHandler.viewScheduledAppointments(getHospitalId());
             break;
         case 8:
-            System.out.println("View Past Appointment Outcome Records - Not implemented yet");
+            apptHandler.viewPastAppointmentOutcomeRecords(getHospitalId());
             break;
         case 9:
             System.out.println("Logging out...");

@@ -1,12 +1,15 @@
 package Doctor;
 
 import Appointment.*;
+import HMS.DataLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -162,10 +165,185 @@ public class DoctorAppointmentManager implements IAppointment {
 	 * @param doctor
 	 * @param appointmentId
 	 */
-	public void recordAppointmentOutcome(Doctor doctor, int appointmentId) {
-		// TODO - implement DoctorAppointmentManager.recordAppointmentOutcome
-		throw new UnsupportedOperationException();
+	public void recordAppointmentOutcome(Doctor doctor) {
+		try {
+			// Read appointments file
+			List<String> availableMedicines = DataLoader.readAvailableMedicines();
+
+        	// Read appointments file
+        	Path path = Paths.get("data/Appointments.csv");
+        	List<String> lines = Files.readAllLines(path);
+        
+        	// Find confirmed appointments for this specific doctor
+        	List<String[]> confirmedAppointments = lines.stream()
+            	.skip(1) // Skip header
+            	.map(line -> line.split(","))
+            	.filter(data -> 
+                	data.length > 4 && 
+                	data[1].trim().equalsIgnoreCase(doctor.getName()) && // Match doctor's name
+                	data[4].trim().equalsIgnoreCase("Confirmed") // Only confirmed appointments
+            )
+            .collect(Collectors.toList());
+
+			
+			// Display confirmed appointments
+			System.out.println("\n=== Your Confirmed Appointments ===");
+			System.out.printf("%-5s %-15s %-15s %-20s %-15s %-15s%n", 
+				"No.", "Appointment ID", "Patient ID", "Patient Name", "Date", "Time");
+			System.out.println("-".repeat(100));
+			
+			for (int i = 0; i < confirmedAppointments.size(); i++) {
+				String[] appointment = confirmedAppointments.get(i);
+				System.out.printf("%-5d %-15s %-15s %-20s %-15s %-15s%n", 
+					i + 1, 
+					appointment[0],  // Appointment ID
+					appointment[5],  // Patient ID
+					appointment[6],  // Patient Name
+					appointment[2],  // Date
+					appointment[3]   // Time
+				);
+			}
+			
+			// Prompt for appointment selection
+			Scanner scanner = new Scanner(System.in);
+			System.out.println("\nEnter the number of the appointment to record outcome");
+			System.out.println("Enter 0 to cancel");
+			
+			System.out.print("Your choice: ");
+			int choice = scanner.nextInt();
+			scanner.nextLine(); // Consume newline
+			
+			// Handle user choice
+			if (choice == 0) {
+				System.out.println("Action cancelled.");
+				return;
+			}
+			
+			if (choice < 1 || choice > confirmedAppointments.size()) {
+				System.out.println("Invalid selection.");
+				return;
+			}
+			
+			// Get the selected appointment ID
+			int selectedAppointmentId = Integer.parseInt(confirmedAppointments.get(choice - 1)[0]);
+			
+			// Find the specific appointment
+			Optional<String[]> appointmentData = lines.stream()
+				.skip(1)
+				.map(line -> line.split(","))
+				.filter(data -> 
+					data[0].trim ().equals(String.valueOf(selectedAppointmentId)) && 
+					data[1].trim().equalsIgnoreCase(doctor.getName())
+				)
+				.findFirst();
+			
+			if (!appointmentData.isPresent()) {
+				System.out.println("Appointment not found.");
+				return;
+			}
+			
+			// Get patient ID and name from the appointment data
+			String patientId = appointmentData.get()[5]; // Patient ID
+			String patientName = appointmentData.get()[6]; // Patient Name
+			
+			// Rest of the existing recordAppointmentOutcome method...
+			// Get services provided
+			System.out.print("Enter services provided (e.g., consultation, X-ray, blood test): ");
+			String servicesProvided = scanner.nextLine();
+			
+			// Prescribed Medications
+			List<String> prescribedMedications = new ArrayList<>();
+			while (true) {
+				System.out.println("\nAvailable Medicines:");
+				for (int i = 0; i < availableMedicines.size(); i++) {
+					System.out.println((i+1) + ". " + availableMedicines.get(i));
+				}
+				System.out.println("0. Finish adding medications");
+				
+				System.out.print("Choose a medicine (number): ");
+				int medicineChoice = scanner.nextInt();
+				scanner.nextLine(); // Consume newline
+				
+				if (medicineChoice == 0) break;
+				
+				if (medicineChoice < 1 || medicineChoice > availableMedicines.size()) {
+					System.out.println("Invalid choice.");
+					continue;
+				}
+				
+				String chosenMedicine = availableMedicines.get(medicineChoice - 1);
+				
+				System.out.print("Enter quantity for " + chosenMedicine + ": ");
+				int quantity = scanner.nextInt();
+				scanner.nextLine(); // Consume newline
+				
+				prescribedMedications.add(chosenMedicine + ":" + quantity);
+			}
+			
+			// Consultation notes
+			System.out.print("Enter consultation notes: ");
+			String consultationNotes = scanner.nextLine();
+			
+			// Write to AppointmentOutcomes.csv with patient ID and name
+			writeAppointmentOutcome(
+				selectedAppointmentId, 
+				doctor.getName(), 
+				appointmentData.get()[2], // Date
+				servicesProvided, 
+				prescribedMedications, 
+				consultationNotes,
+				patientId,
+				patientName
+			);
+			
+			System.out.println("Appointment outcome recorded successfully!");
+			
+		} catch (IOException e) {
+			System.out.println("Error recording appointment outcome: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
+
+private List<String> readAvailableMedicines() throws IOException {
+    return DataLoader.readAvailableMedicines();
+}
+
+private void writeAppointmentOutcome(
+    int appointmentId, 
+    String doctorName, 
+    String date, 
+    String servicesProvided, 
+    List<String> prescribedMedications, 
+    String consultationNotes,
+    String patientId,
+    String patientName
+) throws IOException {
+    Path outcomePath = Paths.get("data/AppointmentOutcomes.csv");
+    
+    // Create file with header if it doesn't exist
+    if (!Files.exists(outcomePath)) {
+        Files.createFile(outcomePath);
+        Files.write(outcomePath, "AppointmentID,DoctorName,PatientID,PatientName,Date,ServicesProvided,PrescribedMedications,ConsultationNotes\n".getBytes(), StandardOpenOption.APPEND);
+    }
+    
+    // Prepare the outcome line
+    String prescriptionString = prescribedMedications.isEmpty() ? 
+        "None" : String.join("|", prescribedMedications);
+    
+    String outcomeLine = String.format("%d,%s,%s,%s,%s,%s,%s,%s\n", 
+        appointmentId, 
+        doctorName, 
+        patientId,
+        patientName,
+        date, 
+        servicesProvided, 
+        prescriptionString, 
+        consultationNotes.replace(",", ";") // Prevent CSV parsing issues
+    );
+    
+    // Append to file
+    Files.write(outcomePath, outcomeLine.getBytes(), StandardOpenOption.APPEND);
+}
 
 	/**
 	 * 

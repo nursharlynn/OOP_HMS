@@ -62,7 +62,7 @@ public class Doctor extends User {
             apptHandler.viewUpcomingAppointments(this);
             break;
         case 7:
-            System.out.println("Record Appointment Outcome - Not implemented yet");
+            ((DoctorAppointmentManager)apptHandler).recordAppointmentOutcome(this);
             break;
         case 8:
             System.out.println("Logging out...");

@@ -30,7 +30,7 @@ public interface IAppointmentsHandler {
 	 * 
 	 * @param patientId
 	 */
-	void getPastOutcomes(String patientId);
+	void viewPastAppointmentOutcomeRecords(String patientId);
 
 	List<String[]> viewAvailableSlots();
 
