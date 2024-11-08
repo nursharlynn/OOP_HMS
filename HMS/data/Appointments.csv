@@ -1,2 +1,4 @@
-AppointmentID,DoctorName,Date,Time,Status
-1,John Smith,2025-12-12,12:00,Available
+AppointmentID,DoctorName,Date,Time,Status,PatientID
+1,John Smith,12/12/2025,12:00,Booked,P1001
+2,John Smith,12/12/2025,13:00,Available,
+3,John Smith,12/12/2025,14:00,Booked,P1001

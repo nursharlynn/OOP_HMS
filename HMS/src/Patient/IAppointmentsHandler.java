@@ -1,8 +1,6 @@
 package Patient;
 
-import Appointment.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IAppointmentsHandler {
 
@@ -13,14 +11,14 @@ public interface IAppointmentsHandler {
 	 * @param date
 	 * @param time
 	 */
-	void scheduleAppointments(Patient patient, String doctorName, LocalDateTime date, LocalDateTime time);
-
+	void scheduleAppointments(Patient patient, int appointmentId);
 	/**
 	 * 
 	 * @param AppointmentsID
 	 * @param scheduledAppointments
 	 */
-	void rescheduleAppointments(int AppointmentsID, ArrayList<ViewScheduledAppointments> scheduledAppointments);
+	void rescheduleAppointments(String hospitalId);
+
 
 	/**
 	 * 
@@ -34,6 +32,8 @@ public interface IAppointmentsHandler {
 	 */
 	void getPastOutcomes(String patientId);
 
-	void viewAvailableSlots();
+	List<String[]> viewAvailableSlots();
+
+	
 
 }

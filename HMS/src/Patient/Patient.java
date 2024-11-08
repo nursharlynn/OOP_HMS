@@ -4,6 +4,7 @@ import Appointment.*;
 import Records.*;
 import User.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -58,13 +59,13 @@ public class Patient extends User {
             updatePersonalInformation();
             break;
         case 3:
-            apptHandler.viewAvailableSlots(); // Call the method to view available slots
+            apptHandler.viewAvailableSlots(); 
             break;
         case 4:
-            System.out.println("Schedule an Appointment - Not implemented yet");
+            scheduleAppointment();
             break;
-        case 5:
-            System.out.println("Reschedule an Appointment - Not implemented yet");
+        case 5: 
+            apptHandler.rescheduleAppointments(getHospitalId());
             break;
         case 6:
             System.out.println("Cancel an Appointment - Not implemented yet");
@@ -156,6 +157,21 @@ public class Patient extends User {
         System.out.println("Personal information update completed.");
     }
 
-    
+    public void scheduleAppointment() {
+        // View available slots
+        List<String[]> availableAppointments = ((PatientAppointmentManager)apptHandler).viewAvailableSlots();
+        
+        if (availableAppointments.isEmpty()) {
+            System.out.println("No available appointments.");
+            return;
+        }
+        
+        // Prompt for appointment ID
+        System.out.print("Enter the Appointment ID you want to book: ");
+        int appointmentId = scanner.nextInt();
+        
+        // Schedule the appointment
+        apptHandler.scheduleAppointments(this, appointmentId);
+    }
 
 }
