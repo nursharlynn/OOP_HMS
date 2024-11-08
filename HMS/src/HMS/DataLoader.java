@@ -144,4 +144,25 @@ public class DataLoader {
             return new ArrayList<>();
         }
     }
+
+    public List<Medicine> getAllMedicines() {
+        List<Medicine> medicines = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(medicineFilePath))) {
+            String line;
+            // Skip header
+            br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                String medicineName = data[0].trim();
+                int initialStock = Integer.parseInt(data[1].trim());
+                int lowStockAlert = Integer.parseInt(data[2].trim());
+                
+                Medicine medicine = new Medicine(medicineName, initialStock, lowStockAlert);
+                medicines.add(medicine);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading medicine file: " + e.getMessage());
+        }
+        return medicines;
+    }
 }

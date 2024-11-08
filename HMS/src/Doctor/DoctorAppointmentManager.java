@@ -441,7 +441,6 @@ public class DoctorAppointmentManager implements IAppointment {
 			return scheduleDetails;
 		} catch (IOException e) {
 			System.out.println("Error retrieving personal schedule: " + e.getMessage());
-			e.printStackTrace();
 			return new ArrayList<>();
 		}
 	}
