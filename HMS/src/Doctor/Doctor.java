@@ -24,6 +24,7 @@ public class Doctor extends User {
     public Doctor(String hospitalId, String password, String name, String gender) {
         super(hospitalId, password, name, gender);
         this.scanner = new Scanner(System.in);
+        this.apptHandler = new DoctorAppointmentManager();
     }
 
     @Override
@@ -55,7 +56,7 @@ public class Doctor extends User {
             setAvailability();
             break;
         case 5:
-            System.out.println("Accept or Decline Appointment Requests - Not implemented yet");
+            apptHandler.reviewAppointmentRequests(this);
             break;
         case 6:
             System.out.println("View Upcoming Appointments - Not implemented yet");

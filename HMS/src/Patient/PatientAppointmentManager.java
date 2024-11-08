@@ -17,10 +17,8 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
 	private PastAppointmentOutcomeRecord pastOutcomes;
 	private static final String APPOINTMENTS_FILE = "data/Appointments.csv";
     private Scanner scanner;
-	private ArrayList<Appointment> Appointments;
 
 	public PatientAppointmentManager() {
-        this.Appointments = new ArrayList<>();
         this.scanner = new Scanner(System.in);
     }
 
@@ -105,7 +103,6 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
 
         } catch (IOException e) {
             System.out.println("Error occurred while rescheduling appointment.");
-            e.printStackTrace();
         }
     }
 
