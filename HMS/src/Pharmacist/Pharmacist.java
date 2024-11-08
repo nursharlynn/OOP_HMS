@@ -4,7 +4,9 @@ import Administrator.Medicine;
 import Appointment.*;
 import HMS.DataLoader;
 import User.*;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,7 +55,7 @@ public void handleMenuChoice(int choice) {
 			AppointmentOutcomeViewer.updatePrescriptionStatus(scanner, System.out);
             break;
         case 5:
-            System.out.println("Dispense Medications - Not implemented yet");
+			dispenseMedications();
             break;
         case 6:
 			checkLowStockAlerts(); // Call the new method for checking low stock
@@ -163,32 +165,92 @@ public void handleMenuChoice(int choice) {
 		}
 	}
 
-	public void checkLowStockAlerts() {
-		DataLoader dataLoader = new DataLoader(null); // Pass null or a valid LoginSystem instance
-		List<Medicine> medicines = dataLoader.getAllMedicines();
+	private void processMedications(List<String> prescribedMedications, boolean isDispensing, List<Medicine> medicines) {
+		for (String medicationEntry : prescribedMedications) {
+			String[] parts = medicationEntry.split(":");
+			String medicineName = parts[0].trim();
+			int quantity = Integer.parseInt(parts[1].trim());
 	
-		if (medicines.isEmpty()) {
-			System.out.println("No medicines available in inventory.");
-			return;
+			// Find the medicine in the inventory
+			for (Medicine medicine : medicines) {
+				if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
+					if (isDispensing) {
+						// Reduce the stock
+						if (medicine.getStock() >= quantity) {
+							medicine.reduceStock(quantity); // Deduct the quantity
+							System.out.printf("Dispensed %d of %s. Remaining stock: %d%n", quantity, medicineName, medicine.getStock());
+						} else {
+							System.out.printf("Not enough stock for %s. Available: %d, Requested: %d%n", medicineName, medicine.getStock(), quantity);
+						}
+					}
+					break; // Exit the loop after finding the medicine
+				}
+			}
 		}
+	}
+
+	private void dispenseMedications() {
+		// Load medicines once
+		DataLoader dataLoader = new DataLoader(null); // Pass a valid LoginSystem instance if necessary
+		List<Medicine> medicines = dataLoader.getAllMedicines(); // Load current medicines
 	
+		List<String> prescribedMedications = readPrescribedMedications();
+		processMedications(prescribedMedications, true, medicines); // Pass the medicines list
+		dataLoader.saveMedicines(medicines); // Persist changes to CSV
+	}
+
+	public void checkLowStockAlerts() {
+		// Load medicines from the data loader
+		DataLoader dataLoader = new DataLoader(null); // Pass a valid LoginSystem instance if necessary
+		List<Medicine> medicines = dataLoader.getAllMedicines(); // Load current medicines
+	
+		List<String> prescribedMedications = readPrescribedMedications();
 		System.out.println("\n=== Low Stock Alerts ===");
 		System.out.printf("%-20s %-10s%n", "Medicine Name", "Stock Level");
 		System.out.println("-".repeat(30));
-	
-		boolean lowStockFound = false;
-	
-		for (Medicine medicine : medicines) {
-			if (medicine.isLowStock()) { // Check if stock is low
-				System.out.printf("%-20s %-10d%n", medicine.getMedicineName(), medicine.getStock());
-				lowStockFound = true;
-			}
-		}
-	
-		if (!lowStockFound) {
-			System.out.println("All medicines are above the low stock level.");
-		}
+		processMedications(prescribedMedications, false, medicines); 
 	}
+
+	private List<String> readPrescribedMedications() {
+		List<String> prescribedMedications = new ArrayList<>();
+		try (BufferedReader br = new BufferedReader(new FileReader("data/AppointmentOutcomes.csv"))) {
+			String line;
+			br.readLine(); // Skip header
+			while ((line = br.readLine()) != null) {
+				String[] data = line.split(",");
+				// Check if status is "Pending" and that prescribed medications exist
+				if (data.length > 6 && "Pending".equalsIgnoreCase(data[8])) { // Assuming status is in the 8th column
+					String medications = data[6]; // Prescribed medications
+	
+					// Split by pipe character
+					String[] meds = medications.split("\\|");
+					for (String med : meds) {
+						// Trim whitespace and check format
+						med = med.trim();
+						if (med.contains(":")) {
+							// Validate the format of each medication entry
+							String[] parts = med.split(":");
+							if (parts.length == 2) {
+								String quantityString = parts[1].trim();
+	
+								// Check if quantity is a valid number
+								try {
+									int quantity = Integer.parseInt(quantityString);
+									prescribedMedications.add(med); // Add valid medication
+								} catch (NumberFormatException e) {
+									// Invalid quantity, do nothing or handle as needed
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("Error reading Appointment Outcomes: " + e.getMessage());
+		}
+		return prescribedMedications;
+	}
+	
 
 }
 	

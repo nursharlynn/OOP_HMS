@@ -58,8 +58,8 @@ public class Medicine {
 
     // Reduce stock when medicine is used
     public void reduceStock(int quantity) {
-        if (quantity > 0 && quantity <= this.stock) {
-            this.stock -= quantity;
+    if (quantity > 0 && quantity <= this.stock) {
+        this.stock -= quantity;
         }
     }
 

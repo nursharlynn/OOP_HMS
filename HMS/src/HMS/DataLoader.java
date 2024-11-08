@@ -156,7 +156,7 @@ public class DataLoader {
                 String medicineName = data[0].trim();
                 int initialStock = Integer.parseInt(data[1].trim());
                 int lowStockAlert = Integer.parseInt(data[2].trim());
-                
+    
                 Medicine medicine = new Medicine(medicineName, initialStock, lowStockAlert);
                 medicines.add(medicine);
             }
@@ -164,5 +164,19 @@ public class DataLoader {
             System.err.println("Error reading medicine file: " + e.getMessage());
         }
         return medicines;
+    }
+
+    public void saveMedicines(List<Medicine> medicines) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(medicineFilePath))) {
+            writer.write("Medicine Name,Initial Stock,Low Stock Level Alert\n"); // Write header
+            for (Medicine medicine : medicines) {
+                writer.write(String.format("%s,%d,%d%n", 
+                    medicine.getMedicineName(), 
+                    medicine.getStock(), 
+                    medicine.getLowStockLevelAlert()));
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving medicines: " + e.getMessage());
+        }
     }
 }
