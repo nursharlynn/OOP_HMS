@@ -30,6 +30,7 @@ public class Patient extends User {
         this.bloodType = bloodType;
         this.medicalRecord = new MedicalRecord();
         this.scanner = new Scanner(System.in); 
+        this.apptHandler = new PatientAppointmentManager();
     }
     
 
@@ -57,7 +58,7 @@ public class Patient extends User {
             updatePersonalInformation();
             break;
         case 3:
-            System.out.println("View Available Appointment Slots - Not implemented yet");
+            apptHandler.viewAvailableSlots(); // Call the method to view available slots
             break;
         case 4:
             System.out.println("Schedule an Appointment - Not implemented yet");

@@ -31,24 +31,44 @@ public class HMSApp {
             System.out.println("\nWelcome to Hospital Management System");
             System.out.println("1. Login");
             System.out.println("2. Exit");
-            System.out.print("Choose an option: ");
             
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-            
-            if (choice == 1) {
-                handleLogin();
-            } else if (choice == 2) {
-                System.out.println("Thank you for using HMS. Goodbye!");
-                break;
-            } else {
-                System.out.println("Invalid option. Please try again.");
+            try {
+                System.out.print("Choose an option: ");
+                int choice = getValidIntInput();
+                
+                if (choice == 1) {
+                    handleLogin();
+                } else if (choice == 2) {
+                    System.out.println("Thank you for using HMS. Goodbye!");
+                    break;
+                } else {
+                    System.out.println("Invalid option. Please try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("An error occurred. Please try again.");
+                // Clear the scanner's buffer
+                scanner.nextLine();
             }
         }
         scanner.close();
     }
+
+    private int getValidIntInput() {
+        while (true) {
+            try {
+                return scanner.nextInt();
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                // Clear the invalid input
+                scanner.nextLine();
+            }
+        }
+    }
     
     private void handleLogin() {
+        // Clear any leftover newline
+        scanner.nextLine();
+        
         System.out.print("Enter Hospital ID: ");
         String hospitalId = scanner.nextLine();
         
@@ -69,14 +89,20 @@ public class HMSApp {
             boolean continueSession = true;
             while (continueSession) {
                 currentUser.displayMenu(); // Show the menu
-                System.out.print("Enter your choice: ");
-                int menuChoice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
+                
+                try {
+                    System.out.print("Enter your choice: ");
+                    int menuChoice = getValidIntInput();
     
-                currentUser.handleMenuChoice(menuChoice);
+                    currentUser.handleMenuChoice(menuChoice);
     
-                // Check if the user chose to logout based on their role
-                continueSession = !isLogoutChoice(currentUser, menuChoice);
+                    // Check if the user chose to logout based on their role
+                    continueSession = !isLogoutChoice(currentUser, menuChoice);
+                } catch (Exception e) {
+                    System.out.println("An error occurred. Please try again.");
+                    // Clear the scanner's buffer
+                    scanner.nextLine();
+                }
             }
         } else {
             System.out.println("Invalid credentials. Please try again.");
@@ -84,12 +110,12 @@ public class HMSApp {
     }
 
     private boolean isLogoutChoice(User user, int choice) {
-    if (user instanceof Patient) return choice == 9;
-    if (user instanceof Doctor) return choice == 8;
-    if (user instanceof Pharmacist) return choice == 7;
-    if (user instanceof Administrator) return choice == 9;
-    return false;
-}
+        if (user instanceof Patient) return choice == 9;
+        if (user instanceof Doctor) return choice == 8;
+        if (user instanceof Pharmacist) return choice == 7;
+        if (user instanceof Administrator) return choice == 9;
+        return false;
+    }
 
     public static void main(String[] args) {
         HMSApp app = new HMSApp();
