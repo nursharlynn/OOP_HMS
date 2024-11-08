@@ -5,14 +5,17 @@ import Appointment.*;
 import User.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Pharmacist extends User {
 
 	private ArrayList<Medicine> inventory;
 	private ArrayList<Appointment> appointments;
+	private Scanner scanner;
 
 	public Pharmacist(String hospitalId, String password, String name, String gender) {
 		super(hospitalId, password, name, gender);
+		this.scanner = new Scanner(System.in); 
 	}
 
 	@Override
@@ -37,10 +40,10 @@ public void handleMenuChoice(int choice) {
             System.out.println("Submit Replenishment Request - Not implemented yet");
             break;
         case 3:
-            System.out.println("View Appointment Outcome Records - Not implemented yet");
-            break;
+			AppointmentOutcomeViewer.viewAppointmentOutcomeRecords(System.out, null);
+			break;
         case 4:
-            System.out.println("Update Prescription Status - Not implemented yet");
+			AppointmentOutcomeViewer.updatePrescriptionStatus(scanner, System.out);
             break;
         case 5:
             System.out.println("Dispense Medications - Not implemented yet");
@@ -74,7 +77,7 @@ public void handleMenuChoice(int choice) {
 	}
 
 	@Override
-	public String toString() {
-		return "Pharmacist: " + getName() + " (ID: " + getHospitalId() + ")";
-	}
+    public String toString() {
+        return "Pharmacist: " + getName() + " (ID: " + getHospitalId() + ")";
+    }
 }
