@@ -1,66 +1,72 @@
 package Administrator;
 
 public class Medicine {
+    private String medicineName;
+    private int stock;
+    private int lowStockLevelAlert;
 
-	private String medicineName;
-	private int stock;
-	private int lowStockLevelAlert;
+    /**
+     * Constructor for Medicine
+     * 
+     * @param name Medicine name
+     * @param stock Initial stock quantity
+     * @param stockAlert Low stock level alert threshold
+     */
+    public Medicine(String name, int stock, int stockAlert) {
+        this.medicineName = name;
+        this.stock = stock;
+        this.lowStockLevelAlert = stockAlert;
+    }
 
-	/**
-	 * 
-	 * @param name
-	 * @param stock
-	 * @param stockAlert
-	 */
-	public Medicine(String name, int stock, int stockAlert) {
-		// TODO - implement Medicine.Medicine
-		throw new UnsupportedOperationException();
-	}
+    public String getMedicineName() {
+        return this.medicineName;
+    }
 
-	public void getMedicineName() {
-		// TODO - implement Medicine.getMedicineName
-		throw new UnsupportedOperationException();
-	}
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
+    }
 
-	/**
-	 * 
-	 * @param medicineName
-	 */
-	public void setMedicineName(int medicineName) {
-		// TODO - implement Medicine.setMedicineName
-		throw new UnsupportedOperationException();
-	}
+    public int getStock() {
+        return this.stock;
+    }
 
-	public void getStock() {
-		// TODO - implement Medicine.getStock
-		throw new UnsupportedOperationException();
-	}
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 
-	/**
-	 * 
-	 * @param stock
-	 */
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
+    public int getLowStockLevelAlert() {
+        return this.lowStockLevelAlert;
+    }
 
-	public void getLowStockLevelAlert() {
-		// TODO - implement Medicine.getLowStockLevelAlert
-		throw new UnsupportedOperationException();
-	}
+    public void setLowStockLevelAlert(int lowStockLevelAlert) {
+        this.lowStockLevelAlert = lowStockLevelAlert;
+    }
 
-	/**
-	 * 
-	 * @param lowStockLevelAlert
-	 */
-	public void A(int lowStockLevelAlert) {
-		// TODO - implement Medicine.A
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String toString() {
+        return "Medicine{" +
+               "name='" + medicineName + '\'' +
+               ", stock=" + stock +
+               ", lowStockAlert=" + lowStockLevelAlert +
+               '}';
+    }
 
-	public String toString() {
-		// TODO - implement Medicine.toString
-		throw new UnsupportedOperationException();
-	}
+    // Check if stock is low
+    public boolean isLowStock() {
+        return this.stock <= this.lowStockLevelAlert;
+    }
 
+    // Reduce stock when medicine is used
+    public void reduceStock(int quantity) {
+        if (quantity > 0 && quantity <= this.stock) {
+            this.stock -= quantity;
+        }
+    }
+
+    // Add stock when replenishing
+    public void addStock(int quantity) {
+        if (quantity > 0) {
+            this.stock += quantity;
+        }
+    }
 }

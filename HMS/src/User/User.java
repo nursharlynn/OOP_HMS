@@ -1,94 +1,53 @@
 package User;
 
-public class User {
+public abstract class User {
+    private String hospitalId;  // Changed from userId to match system requirements
+    private String password;
+    private String name;
+    private String role;
+    private String gender;
+    private int age;
+    private boolean isFirstLogin;
 
-	private String hospitalId;
-	private String password;
-	private String name;
-	private String gender;
-	private int age;
-	private int pharmacistId;
-	private int doctorId;
+    public User(String hospitalId, String password, String name, String gender, int age) {
+        this.hospitalId = hospitalId;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+        this.isFirstLogin = true;
+    }
 
-	/**
-	 * 
-	 * @param hospitalId
-	 * @param password
-	 * @param name
-	 * @param gender
-	 * @param age
-	 */
-	public User(String hospitalId, String password, String name, String gender, int age) {
-		// TODO - implement User.User
-		throw new UnsupportedOperationException();
-	}
+    // Getters
+    public String getHospitalId() { return hospitalId; }
+    public String getName() { return name; }
+    public String getRole() { return role; }
+    public String getGender() { return gender; }
+    public int getAge() { return age; }
+    public boolean isFirstLogin() { return isFirstLogin; }
 
-	/**
-	 * 
-	 * @param enteredId
-	 * @param enteredPass
-	 */
-	public void login(String enteredId, String enteredPass) {
-		// TODO - implement User.login
-		throw new UnsupportedOperationException();
-	}
+    // Setters
+    public void setFirstLogin(boolean firstLogin) {
+        this.isFirstLogin = firstLogin;
+    }
+    // Password methods
+    public boolean checkPassword(String inputPassword) {
+        return this.password.equals(inputPassword);
+    }
 
-	public void logout() {
-		// TODO - implement User.logout
-		throw new UnsupportedOperationException();
-	}
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+        this.isFirstLogin = false;
+    }
+    
 
-	/**
-	 * 
-	 * @param newPassword
-	 */
-	public void changePassword(String newPassword) {
-		// TODO - implement User.changePassword
-		throw new UnsupportedOperationException();
-	}
+    // Abstract method that all user types must implement
+    public abstract void displayMenu();
 
-	public String getName() {
-		return this.name;
-	}
+    public abstract void handleMenuChoice(int choice);
 
-	/**
-	 * 
-	 * @param name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getGender() {
-		return this.gender;
-	}
-
-	/**
-	 * 
-	 * @param gender
-	 */
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public int getAge() {
-		return this.age;
-	}
-
-	/**
-	 * 
-	 * @param age
-	 */
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public int getPharmacistId() {
-		return this.pharmacistId;
-	}
-
-	public int getDoctorId() {
-		return this.doctorId;
-	}
-
+    @Override
+    public String toString() {
+        return "User: " + name + " (ID: " + hospitalId + ", Role: " + role + ")";
+    }
 }

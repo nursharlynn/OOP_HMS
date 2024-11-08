@@ -4,53 +4,48 @@ import java.time.LocalDateTime;
 
 public class TimeSlot {
 
-	Schedule contains;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
-	private Status status;
+    Schedule contains;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private Status status;
 
-	/**
-	 * 
-	 * @param startTime
-	 * @param endTime
-	 */
-	public TimeSlot(LocalDateTime startTime, LocalDateTime endTime) {
-		// TODO - implement TimeSlot.TimeSlot
-		throw new UnsupportedOperationException();
-	}
+    public TimeSlot(LocalDateTime startTime, LocalDateTime endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        // Default status is Available
+        this.status = Status.Available;
+    }
 
-	public Status getStatus() {
-		return this.status;
-	}
+    public Status getStatus() {
+        return this.status;
+    }
 
-	/**
-	 * 
-	 * @param status
-	 */
-	public void setStatus(Status status) {
-		this.status = status;
-	}
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
-	/**
-	 * 
-	 * @param date
-	 */
-	public void setDate(LocalDateTime date) {
-		// TODO - implement TimeSlot.setDate
-		throw new UnsupportedOperationException();
-	}
+    public void setDate(LocalDateTime date) {
+        // Update start and end times based on the new date
+        long hoursDifference = startTime.getHour();
+        long minutesDifference = startTime.getMinute();
+        
+        startTime = date.withHour((int)hoursDifference).withMinute((int)minutesDifference);
+        endTime = startTime.plusHours(1); // Assuming 1-hour slots
+    }
 
-	public LocalDateTime getStartTime() {
-		return this.startTime;
-	}
+    public LocalDateTime getStartTime() {
+        return this.startTime;
+    }
 
-	public LocalDateTime getEndTime() {
-		return this.endTime;
-	}
+    public LocalDateTime getEndTime() {
+        return this.endTime;
+    }
 
-	public String toString() {
-		// TODO - implement TimeSlot.toString
-		throw new UnsupportedOperationException();
-	}
-
+    public String toString() {
+        return "TimeSlot{" +
+               "startTime=" + startTime +
+               ", endTime=" + endTime +
+               ", status=" + status +
+               '}';
+    }
 }
