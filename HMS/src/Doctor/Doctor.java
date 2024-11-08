@@ -50,7 +50,7 @@ public class Doctor extends User {
             System.out.println("Update Patient Medical Records - Not implemented yet");
             break;
         case 3:
-            System.out.println("View Personal Schedule - Not implemented yet");
+            viewPersonalSchedule();
             break;
         case 4:
             setAvailability();
@@ -59,7 +59,7 @@ public class Doctor extends User {
             apptHandler.reviewAppointmentRequests(this);
             break;
         case 6:
-            System.out.println("View Upcoming Appointments - Not implemented yet");
+            apptHandler.viewUpcomingAppointments(this);
             break;
         case 7:
             System.out.println("Record Appointment Outcome - Not implemented yet");
@@ -90,8 +90,8 @@ public class Doctor extends User {
 
     // Placeholder methods for potential future implementation
     public List<String> viewPersonalSchedule() {
-        System.out.println("View Personal Schedule - Not implemented");
-        return null;
+        DoctorAppointmentManager appointmentManager = new DoctorAppointmentManager();
+        return appointmentManager.viewPersonalSchedule(this);
     }
 
     /**

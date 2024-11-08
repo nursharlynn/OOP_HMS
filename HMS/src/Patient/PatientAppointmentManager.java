@@ -116,15 +116,26 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
             String[] data = lines.get(i).split(",");
             
             if (Integer.parseInt(data[0]) == currentAppointmentId) {
-                lines.set(i, String.format("%s,%s,%s,%s,Available,", 
+                // Reset the current appointment to available
+                lines.set(i, String.format("%s,%s,%s,%s,Available,,", 
                     data[0], data[1], data[2], data[3]));
                 currentAppointmentFound = true;
             }
             
             if (Integer.parseInt(data[0]) == newAppointmentId) {
                 if (data.length >= 5 && data[4].trim().equalsIgnoreCase("Available")) {
-                    lines.set(i, String.format("%s,%s,%s,%s,Booked,%s", 
-                        data[0], data[1], data[2], data[3], hospitalId));
+                    // Find the patient's name from the current booked appointment
+                    String patientName = "";
+                    for (String[] searchData : getPatientBookedAppointments(hospitalId)) {
+                        if (Integer.parseInt(searchData[0]) == currentAppointmentId) {
+                            patientName = searchData.length > 6 ? searchData[6] : "";
+                            break;
+                        }
+                    }
+                    
+                    // Book the new appointment with patient details
+                    lines.set(i, String.format("%s,%s,%s,%s,Booked,%s,%s", 
+                        data[0], data[1], data[2], data[3], hospitalId, patientName));
                     newAppointmentFound = true;
                 } else {
                     System.out.println("The selected appointment is not available.");
@@ -180,8 +191,8 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                 data[4].trim().equalsIgnoreCase("Booked") && 
                 data[5].trim().equals(hospitalId)) {
                 
-                // Change the status back to Available
-                lines.set(i, String.format("%s,%s,%s,%s,Available,", 
+                // Change the status back to Available and clear patient details
+                lines.set(i, String.format("%s,%s,%s,%s,Available,,", 
                     data[0], data[1], data[2], data[3]));
                 
                 appointmentFound = true;
@@ -209,35 +220,42 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
 
     @Override
     public void scheduleAppointments(Patient patient, int appointmentId) {
-        try {
-            Path path = Paths.get("data/Appointments.csv");
-            List<String> lines = Files.readAllLines(path);
+    try {
+        Path path = Paths.get("data/Appointments.csv");
+        List<String> lines = Files.readAllLines(path);
+        
+        boolean appointmentFound = false;
+        for (int i = 1; i < lines.size(); i++) {
+            String[] data = lines.get(i).split(",");
             
-            boolean appointmentFound = false;
-            for (int i = 1; i < lines.size(); i++) {
-                String[] data = lines.get(i).split(",");
+            if (Integer.parseInt(data[0]) == appointmentId && 
+                data[4].trim().equalsIgnoreCase("Available")) {
                 
-                if (Integer.parseInt(data[0]) == appointmentId && 
-                    data[4].trim().equalsIgnoreCase("Available")) {
-                    
-                    lines.set(i, String.format("%s,%s,%s,%s,Booked,%s", 
-                        data[0], data[1], data[2], data[3], patient.getHospitalId()));
-                    
-                    appointmentFound = true;
-                    break;
-                }
+                // Updated to include patient name
+                lines.set(i, String.format("%s,%s,%s,%s,Booked,%s,%s", 
+                    data[0],      // Appointment ID
+                    data[1],      // Doctor Name
+                    data[2],      // Date
+                    data[3],      // Time
+                    patient.getHospitalId(),  // Patient ID
+                    patient.getName()        // Patient Name
+                ));
+                
+                appointmentFound = true;
+                break;
             }
-            
-            if (appointmentFound) {
-                Files.write(path, lines);
-                System.out.println("Appointment successfully booked!");
-            } else {
-                System.out.println("Appointment not found or no longer available.");
-            }
-        } catch (IOException e) {
-            System.out.println("Error booking appointment: " + e.getMessage());
         }
+        
+        if (appointmentFound) {
+            Files.write(path, lines);
+            System.out.println("Appointment successfully booked!");
+        } else {
+            System.out.println("Appointment not found or no longer available.");
+        }
+    } catch (IOException e) {
+        System.out.println("Error booking appointment: " + e.getMessage());
     }
+}
 
 
 	@Override
@@ -270,39 +288,45 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
     }
 
 	public void viewScheduledAppointments(String hospitalId) {
-		try {
-			Path path = Paths.get(APPOINTMENTS_FILE);
-			List<String> lines = Files.readAllLines(path);
-			
-			// Filter appointments for the specific patient
-			List<String[]> patientAppointments = lines.stream()
-				.skip(1) // Skip header
-				.map(line -> line.split(","))
-				.filter(data -> 
-					data.length > 5 && 
-					data[5].trim().equals(hospitalId
-				))
-				.collect(Collectors.toList());
-			
-			// Check if patient has any scheduled appointments
-			if (patientAppointments.isEmpty()) {
-				System.out.println("No scheduled appointments found.");
-				return;
-			}
-	
-			// Display the scheduled appointments
-			System.out.println("\n=== Your Scheduled Appointments ===");
-			System.out.printf("%-10s %-20s %-15s %-15s %-15s%n", 
-				"Appt ID", "Doctor Name", "Date", "Time", "Status");
-			System.out.println("-".repeat(75));
-	
-			for (String[] appointment : patientAppointments) {
-				System.out.printf("%-10s %-20s %-15s %-15s %-15s%n", 
-					appointment[0], appointment[1], appointment[2], appointment[3], appointment[4]);
-			}
-		} catch (IOException e) {
-			System.out.println("Error occurred while retrieving scheduled appointments.");
-			e.printStackTrace();
-		}
-	}
+        try {
+            Path path = Paths.get(APPOINTMENTS_FILE);
+            List<String> lines = Files.readAllLines(path);
+            
+            // Filter appointments for the specific patient
+            List<String[]> patientAppointments = lines.stream()
+                .skip(1) // Skip header
+                .map(line -> line.split(","))
+                .filter(data -> 
+                    data.length > 5 && 
+                    data[5].trim().equals(hospitalId)
+                )
+                .collect(Collectors.toList());
+            
+            // Check if patient has any scheduled appointments
+            if (patientAppointments.isEmpty()) {
+                System.out.println("No scheduled appointments found.");
+                return;
+            }
+    
+            // Display the scheduled appointments
+            System.out.println("\n=== Your Scheduled Appointments ===");
+            System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s%n", 
+                "Appt ID", "Doctor Name", "Date", "Time", "Status", "Patient Name");
+            System.out.println("-".repeat(90));
+    
+            for (String[] appointment : patientAppointments) {
+                System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s%n", 
+                    appointment[0], 
+                    appointment[1], 
+                    appointment[2], 
+                    appointment[3], 
+                    appointment[4],
+                    appointment[6]  // Patient Name
+                );
+            }
+        } catch (IOException e) {
+            System.out.println("Error occurred while retrieving scheduled appointments.");
+            e.printStackTrace();
+        }
+    }
 }

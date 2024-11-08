@@ -24,6 +24,8 @@ public interface IAppointment {
 	 */
 	ArrayList<CompletedAppointment> viewPastAppointmentOutcomeRecord(String patientId);
 
+	ArrayList<Appointment> viewUpcomingAppointments(Doctor doctor);
+
 	
 
 }

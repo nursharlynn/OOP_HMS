@@ -47,21 +47,21 @@ public class DoctorAppointmentManager implements IAppointment {
             
             // Display booked appointments
             System.out.println("\n=== Your Booked Appointments ===");
-            System.out.printf("%-5s %-15s %-15s %-15s %-15s %-15s%n", 
-                "No.", "Appointment ID", "Patient ID", "Date", "Time", "Status");
-            System.out.println("-".repeat(85));
+        	System.out.printf("%-5s %-15s %-15s %-20s %-15s %-15s%n", 
+            "No.", "Appointment ID", "Patient ID", "Patient Name", "Date", "Time");
+        	System.out.println("-".repeat(100));
             
-            for (int i = 0; i < doctorAppointments.size(); i++) {
-                String[] appointment = doctorAppointments.get(i);
-                System.out.printf("%-5d %-15s %-15s %-15s %-15s %-15s%n", 
-                    i + 1, 
-                    appointment[0],  // Appointment ID
-                    appointment[5],  // Patient ID
-                    appointment[2],  // Date
-                    appointment[3],  // Time
-                    appointment[4]   // Status
-                );
-            }
+			for (int i = 0; i < doctorAppointments.size(); i++) {
+				String[] appointment = doctorAppointments.get(i);
+				System.out.printf("%-5d %-15s %-15s %-20s %-15s %-15s%n", 
+					i + 1, 
+					appointment[0],  // Appointment ID
+					appointment[5],  // Patient ID
+					appointment[6], // Patient Name
+					appointment[2],  // Date
+					appointment[3]   // Time
+				);
+			}
             
             // Prompt for appointment selection
             System.out.println("\nOptions:");
@@ -88,10 +88,11 @@ public class DoctorAppointmentManager implements IAppointment {
             
             // Confirm action
             System.out.println("\nSelected Appointment Details:");
-            System.out.printf("Appointment ID: %s%n", selectedAppointment[0]);
-            System.out.printf("Patient ID: %s%n", selectedAppointment[5]);
-            System.out.printf("Date: %s%n", selectedAppointment[2]);
-            System.out.printf("Time: %s%n", selectedAppointment[3]);
+        	System.out.printf("Appointment ID: %s%n", selectedAppointment[0]);
+        	System.out.printf("Patient ID: %s%n", selectedAppointment.length > 5 ? selectedAppointment[5] : "N/A");
+        	System.out.printf("Patient Name: %s%n", selectedAppointment.length > 6 ? selectedAppointment[6] : "N/A");
+        	System.out.printf("Date: %s%n", selectedAppointment[2]);
+        	System.out.printf("Time: %s%n", selectedAppointment[3]);
             
             System.out.println("\nChoose an action:");
             System.out.println("1. Accept Appointment");
@@ -123,15 +124,17 @@ public class DoctorAppointmentManager implements IAppointment {
                 if (data[0].equals(appointmentId)) {
                     switch (action) {
                         case 1: // Accept
-                            lines.set(i, String.format("%s,%s,%s,%s,Confirmed,%s", 
-                                data[0], data[1], data[2], data[3], data[5]));
+							lines.set(i, String.format("%s,%s,%s,%s,Confirmed,%s,%s", 
+								data[0], data[1], data[2], data[3], 
+								data[5], data[6]
+							));
                             System.out.println("Appointment accepted successfully.");
                             break;
                         case 2: // Decline
-                            lines.set(i, String.format("%s,%s,%s,%s,Available,%s", 
-                                data[0], data[1], data[2], data[3], ""));
-                            System.out.println("Appointment declined successfully. Slot is now available.");
-                            break;
+								lines.set(i, String.format("%s,%s,%s,%s,Available,,", 
+									data[0], data[1], data[2], data[3]));
+								System.out.println("Appointment declined successfully. Slot is now available.");
+								break;
                         case 0: // Cancel
                             System.out.println("Action cancelled.");
                             return false;
@@ -173,13 +176,106 @@ public class DoctorAppointmentManager implements IAppointment {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param doctor
-	 */
 	public ArrayList<Appointment> viewUpcomingAppointments(Doctor doctor) {
-		// TODO - implement DoctorAppointmentManager.viewUpcomingAppointments
-		throw new UnsupportedOperationException();
+		try {
+			Path path = Paths.get("data/Appointments.csv");
+			List<String> lines = Files.readAllLines(path);
+			
+			// Filter appointments for this specific doctor with Confirmed status
+			List<String[]> upcomingAppointments = lines.stream()
+				.skip(1) // Skip header
+				.map(line -> line.split(","))
+				.filter(data -> 
+					data.length > 4 && 
+					data[1].trim().equalsIgnoreCase(doctor.getName()) && // Match doctor's name
+					data[4].trim().equalsIgnoreCase("Confirmed") // Only confirmed appointments
+				)
+				.collect(Collectors.toList());
+			
+			// Check if there are any upcoming appointments
+			if (upcomingAppointments.isEmpty()) {
+				System.out.println("No upcoming appointments found.");
+				return new ArrayList<>();
+			}
+			
+			// Display upcoming appointments
+			System.out.println("\n=== Your Upcoming Appointments ===");
+			System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s%n", 
+				"Appt ID", "Doctor Name", "Patient Name", "Patient ID", "Date", "Time");
+			System.out.println("-".repeat(100));
+			
+			ArrayList<Appointment> appointmentList = new ArrayList<>();
+			
+			for (String[] appointment : upcomingAppointments) {
+				System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s%n", 
+					appointment[0],  // Appointment ID
+					appointment[1],  // Doctor Name
+					appointment[6],  // Patient Name
+					appointment[5],  // Patient ID
+					appointment[2],  // Date
+					appointment[3]   // Time
+				);
+			}
+			
+			return appointmentList;
+		} catch (IOException e) {
+			System.out.println("Error retrieving upcoming appointments: " + e.getMessage());
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+
+	public List<String> viewPersonalSchedule(Doctor doctor) {
+		try {
+			Path path = Paths.get("data/Appointments.csv");
+			List<String> lines = Files.readAllLines(path);
+			
+			// Filter appointments for this specific doctor
+			List<String[]> doctorAppointments = lines.stream()
+				.skip(1) // Skip header
+				.map(line -> line.split(","))
+				.filter(data -> 
+					data.length > 1 && 
+					data[1].trim().equalsIgnoreCase(doctor.getName())
+				)
+				.collect(Collectors.toList());
+			
+			// Check if there are any appointments
+			if (doctorAppointments.isEmpty()) {
+				System.out.println("No appointments found in your schedule.");
+				return new ArrayList<>();
+			}
+			
+			// Display doctor's schedule
+			System.out.println("\n=== Your Personal Schedule ===");
+			System.out.printf("%-10s %-20s %-15s %-15s %-15s%n", 
+				"Appt ID", "Doctor Name", "Date", "Time", "Status");
+			System.out.println("-".repeat(75));
+			
+			List<String> scheduleDetails = new ArrayList<>();
+			
+			for (String[] appointment : doctorAppointments) {
+				// Format: AppointmentID, DoctorName, Date, Time, Status, PatientID, PatientName
+				System.out.printf("%-10s %-20s %-15s %-15s %-15s%n", 
+					appointment[0],      // Appointment ID
+					appointment[1],      // Doctor Name
+					appointment[2],      // Date
+					appointment[3],      // Time
+					appointment.length > 4 ? appointment[4] : "N/A"  // Status
+				);
+				
+				// Add to schedule details list
+				scheduleDetails.add(String.format("Appointment ID: %s, Date: %s, Time: %s, Status: %s", 
+					appointment[0], appointment[2], appointment[3], 
+					appointment.length > 4 ? appointment[4] : "N/A"));
+			}
+			
+			return scheduleDetails;
+		} catch (IOException e) {
+			System.out.println("Error retrieving personal schedule: " + e.getMessage());
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 	}
 
 }
