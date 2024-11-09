@@ -1,69 +1,50 @@
-package Appointment;
-
-import Patient.*;
+package project;
 
 import java.time.LocalDateTime;
 
-import Doctor.*;
+public class Appointment {
+    private String appointmentId;
+    private String patientId;
+    private String doctorId;
+    private LocalDateTime dateTime;
+    private String status; // "scheduled", "confirmed", "canceled"
 
-public class Appointment extends TimeSlot {
+    public Appointment(String appointmentId, String patientId, String doctorId, LocalDateTime dateTime) {
+        this.appointmentId = appointmentId;
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.dateTime = dateTime;
+        this.status = "scheduled"; // default status
+    }
 
-	private int id;
-	private Patient patient;
-	private Doctor doctor;
-	private LocalDateTime date;
+    public String getAppointmentId() {
+        return appointmentId;
+    }
 
-	/**
-	 * 
-	 * @param start
-	 * @param end
-	 */
-	public Appointment(LocalDateTime start, LocalDateTime end) {
-		// TODO - implement Appointment.Appointment
-		super(start, end);
-		throw new UnsupportedOperationException();
-	}
+    public String getPatientId() {
+        return patientId;
+    }
 
-	public Patient getPatient() {
-		return this.patient;
-	}
+    public String getDoctorId() {
+        return doctorId;
+    }
 
-	/**
-	 * 
-	 * @param doctor
-	 */
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 
-	public Doctor getDoctor() {
-		return this.doctor;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public LocalDateTime getDate() {
-		return this.date;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	/**
-	 * 
-	 * @param date
-	 */
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
-	public int generateAppointmentId() {
-		// TODO - implement Appointment.generateAppointmentId
-		throw new UnsupportedOperationException();
-	}
-
-	public int getId() {
-		return this.id;
-	}
-
-	public String toString() {
-		// TODO - implement Appointment.toString
-		throw new UnsupportedOperationException();
-	}
-
+    @Override
+    public String toString() {
+        return "Appointment ID: " + appointmentId + ", Doctor ID: " + doctorId +
+               ", Patient ID: " + patientId + ", Date/Time: " + dateTime +
+               ", Status: " + status;
+    }
 }
