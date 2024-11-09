@@ -1,6 +1,7 @@
 package Appointment;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import Doctor.*;
 import Patient.*;
@@ -18,5 +19,16 @@ public class ViewScheduledAppointments {
 		// TODO - implement ViewScheduledAppointments.view
 		throw new UnsupportedOperationException();
 	}
+
+	public String getDoctorId() {
+		// TODO Auto-generated method stub
+		return getDoctorId();
+	}
+
+	public Collection<? extends Appointment> getAppointments() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
