@@ -1,8 +1,7 @@
 package Doctor;
 
-import java.util.ArrayList;
-
 import Appointment.*;
+import java.util.ArrayList;
 
 public interface IAppointment {
 
@@ -17,12 +16,16 @@ public interface IAppointment {
 	 * @param doctor
 	 * @param appointmentId
 	 */
-	void recordAppointmentOutcome(Doctor doctor, int appointmentId);
+	void recordAppointmentOutcome(Doctor doctor);
 
 	/**
 	 * 
 	 * @param patientId
 	 */
 	ArrayList<CompletedAppointment> viewPastAppointmentOutcomeRecord(String patientId);
+
+	ArrayList<Appointment> viewUpcomingAppointments(Doctor doctor);
+
+	
 
 }
