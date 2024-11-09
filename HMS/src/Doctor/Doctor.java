@@ -1,77 +1,38 @@
-package Doctor;
-
-import User.*;
-
-import java.time.LocalDateTime;
+package project;
 import java.util.List;
+import java.util.ArrayList;
 
-import Appointment.*;
-import Records.*;
+public class Doctor {
+    private String id;
+    private String name;
+    private List<String> availableSlots = new ArrayList<>(); // Ensure it's initialized
 
-public class Doctor extends User {
-
-	private Schedule schedule;
-	private IAppointment apptHandler;
-	private MedicalRecord medicalRecord;
-
-	/**
-	 * 
-	 * @param hospitalId
-	 * @param name
-	 * @param gender
-	 * @param age
-	 */
-	public Doctor(String hospitalId, String password, String name, String gender, int age) {
-		// TODO - implement Doctor.Doctor
-		super(hospitalId, password, name, gender, age);
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param apptHandler
-	 */
-	public void setApptHandler(IAppointment apptHandler) {
-        this.apptHandler = apptHandler;
+    public void setAvailability(String slot) {
+        availableSlots.add(slot); 
     }
 
-	/**
-	 * 
-	 * @param schedule
-	 */
-	public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
+    public List<String> getAvailableSlots() {
+        return availableSlots;
     }
 
-	public List<String> viewPersonalSchedule() {
-		// TODO - implement Doctor.viewPersonalSchedule
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String toString() {
+        return "Doctor ID: " + id + ", Name: " + name;
+    }
+    
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * 
-	 * @param start
-	 */
-	public boolean updateAvailability(LocalDateTime start) {
-		// TODO - implement Doctor.updateAvailability
-		throw new UnsupportedOperationException();
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * 
-	 * @param patientId
-	 * @param newDiagnosis
-	 * @param prescriptions
-	 * @param newTreatment
-	 */
-	public void updatePatientMedicalRecords(String patientId, String newDiagnosis, String prescriptions, String newTreatment) {
-		// TODO - implement Doctor.updatePatientMedicalRecords
-		throw new UnsupportedOperationException();
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String toString() {
-		// TODO - implement Doctor.toString
-		throw new UnsupportedOperationException();
-	}
-
+    public void setName(String name) {
+        this.name = name;
+    }
 }
