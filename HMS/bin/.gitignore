@@ -1,8 +1,10 @@
+/.DS_Store
 /Administrator/
 /Appointment/
+/Doctor/
+/HMS/
 /Patient/
 /Pharmacist/
 /Records/
 /User/
-/HMS/
-/Doctor/
+/module-info.class
