@@ -1,4 +1,4 @@
-package project;
+package Appointment;
 
 import java.time.LocalDateTime;
 
