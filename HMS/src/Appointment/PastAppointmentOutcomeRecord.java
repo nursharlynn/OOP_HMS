@@ -14,4 +14,14 @@ public class PastAppointmentOutcomeRecord {
 		throw new UnsupportedOperationException();
 	}
 
+	public void addCompletedAppointment(CompletedAppointment completedAppt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public ArrayList<CompletedAppointment> getRecordsByPatient(String patientId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

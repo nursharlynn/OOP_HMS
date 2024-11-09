@@ -1,31 +1,16 @@
 package Doctor;
 
-import Appointment.*;
 import java.util.ArrayList;
+import Appointment.CompletedAppointment;
+import Appointment.Appointment;
 
 public interface IAppointment {
 
-	/**
-	 * 
-	 * @param doctor
-	 */
-	boolean reviewAppointmentRequests(Doctor doctor);
+    boolean reviewAppointmentRequests(Doctor doctor);
 
-	/**
-	 * 
-	 * @param doctor
-	 * @param appointmentId
-	 */
-	void recordAppointmentOutcome(Doctor doctor);
+    void recordAppointmentOutcome(Doctor doctor, int appointmentId);
 
-	/**
-	 * 
-	 * @param patientId
-	 */
-	ArrayList<CompletedAppointment> viewPastAppointmentOutcomeRecord(String patientId);
+    ArrayList<CompletedAppointment> viewPastAppointmentOutcomeRecord(String patientId);
 
-	ArrayList<Appointment> viewUpcomingAppointments(Doctor doctor);
-
-	
-
+    ArrayList<Appointment> viewUpcomingAppointments(Doctor doctor);
 }

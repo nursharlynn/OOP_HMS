@@ -22,7 +22,7 @@ public class AppointmentOutcome {
 	 * @param consultationNotes
 	 * @param prescriptionStatus
 	 */
-	public AppointmentOutcome(int AppointmentsId, LocalDateTime date, String serviceType, ArrayList<Medicine> prescribedMedications, String consultationNotes, String prescriptionStatus) {
+	public AppointmentOutcome(int AppointmentsId, LocalDateTime date, String serviceType, ArrayList<Medication> prescribedMedications, String consultationNotes, String prescriptionStatus) {
 		// TODO - implement AppointmentOutcome.AppointmentOutcome
 		throw new UnsupportedOperationException();
 	}
@@ -39,7 +39,7 @@ public class AppointmentOutcome {
 		this.serviceType = serviceType;
 	}
 
-	public List<Medicine> getPrescribedMedications() {
+	public List<Medication> getPrescribedMedications() {
 		return this.prescribedMedications;
 	}
 
@@ -47,7 +47,7 @@ public class AppointmentOutcome {
 	 * 
 	 * @param prescribedMedications
 	 */
-	public void setPrescribedMedications(List<Medicine> prescribedMedications) {
+	public void setPrescribedMedications(List<Medication> prescribedMedications) {
 		this.prescribedMedications = prescribedMedications;
 	}
 

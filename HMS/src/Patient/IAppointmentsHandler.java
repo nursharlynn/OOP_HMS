@@ -1,40 +1,17 @@
 package Patient;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import Appointment.*;
+import Doctor.Doctor;
 
 public interface IAppointmentsHandler {
 
-	/**
-	 * 
-	 * @param patient
-	 * @param doctorName
-	 * @param date
-	 * @param time
-	 */
-	void scheduleAppointments(Patient patient, int appointmentId);
-	/**
-	 * 
-	 * @param AppointmentsID
-	 * @param scheduledAppointments
-	 */
-	void rescheduleAppointments(String hospitalId);
+    void scheduleAppointments(Patient patient, Doctor doctor, LocalDateTime date, LocalDateTime time);
 
+    void rescheduleAppointments(int AppointmentsID, ArrayList<ViewScheduledAppointments> scheduledAppointments);
 
-	/**
-	 * 
-	 * @param AppointmentsID
-	 */
-	void cancelAppointment(String hospitalId);
+    boolean cancelAppointments(int AppointmentsID);
 
-	/**
-	 * 
-	 * @param patientId
-	 */
-	void viewPastAppointmentOutcomeRecords(String patientId);
-
-	List<String[]> viewAvailableSlots();
-
-	void viewScheduledAppointments(String hospitalId);
-	
-
+    void getPastOutcomes(String patientId);
 }

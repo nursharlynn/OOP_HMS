@@ -1,70 +1,110 @@
 package User;
 
-public abstract class User {
-    private String hospitalId;  // Changed from userId to match system requirements
-    private String password;
-    private String name;
-    private String role;
-    private String gender;
-    private int age;
-    private boolean isFirstLogin;
+public class User {
 
-    public User(String hospitalId, String password, String name, String gender, String role) {
-        this.hospitalId = hospitalId;
-        this.password = password;
-        this.name = name;
-        this.gender = gender;
-        this.role = role; // Set the role
-    }
+	private String hospitalId;
+	private String password;
+	private String name;
+	private String gender;
+	private int age;
+	private int pharmacistId;
+	private int doctorId;
+	private String role;
 
-    // Getters
-    public String getHospitalId() { return hospitalId; }
-    public String getName() { return name; }
-    public String getRole() { return role; }
-    public String getGender() { return gender; }
-    public int getAge() { return age; }
-    public boolean isFirstLogin() { return isFirstLogin; }
+	/**
+	 * 
+	 * @param hospitalId
+	 * @param password
+	 * @param name
+	 * @param gender
+	 * @param age
+	 */
 
-    // Setters
-    public void setFirstLogin(boolean firstLogin) {
-        this.isFirstLogin = firstLogin;
-    }
-    // Password methods
-    public boolean checkPassword(String inputPassword) {
-        return this.password.equals(inputPassword);
-    }
 
-    public void changePassword(String newPassword) {
-        this.password = newPassword;
-        this.isFirstLogin = false;
-    }
-    
+	public User(String hospitalId, String password, String name, String gender, int age) {
+		this.hospitalId = hospitalId;
+		this.password = "password";
+		this.name = name;
+		this.gender = gender;
+		this.age = age;
+		
+		// TODO - implement User.User
+		throw new UnsupportedOperationException();
+	}
 
-    // Abstract method that all user types must implement
-    public abstract void displayMenu();
+	/**
+	 * 
+	 * @param enteredId
+	 * @param enteredPass
+	 */
+	
+	public boolean login(String enteredId, String enteredPass) {
+		
+		if (this.hospitalId.equals(enteredId) && this.password.equals(enteredPass)) {
+            System.out.println("Login successful. Welcome, " + name + "!");
+            // Role-specific access would be checked elsewhere in the system
+            return true;
+        } else {
+            System.out.println("Invalid credentials.");
+            return false;
+        }
+	
+	}
 
-    public abstract void handleMenuChoice(int choice);
+	public void logout() {
+		System.out.println(name + " has logged out.");
+	}
 
-    @Override
-    public String toString() {
-        return "User: " + name + " (ID: " + hospitalId + ", Role: " + role + ")";
-    }
+	/**
+	 * 
+	 * @param newPassword
+	 */
+	public void changePassword(String newPassword) {
+		this.password = newPassword;
+        System.out.println("Password updated successfully.");
+	}
+	
+	//All Getters and Setters
+	
+	public String getRole() {
+		return this.role;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setRole(String role){
-        this.role = role;
-    }
+	public String getGender() {
+		return this.gender;
+	}
 
-    public void setGender(String gender){
-        this.gender = gender;
-    }
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-    public void setAge(int age){
-        this.age = age;
-    }
+	public int getAge() {
+		return this.age;
+	}
 
-    
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getPharmacistId() {
+		return this.pharmacistId;
+	}
+
+	public int getDoctorId() {
+		return this.doctorId;
+	}
+
+	public String getHospitalId() {
+		// TODO Auto-generated method stub
+		return getHospitalId();
+	}
+
 }
