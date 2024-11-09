@@ -1,22 +1,14 @@
 package Administrator;
 
 import User.*;
-
-import java.util.List;
-
 import Doctor.*;
 import Pharmacist.*;
 
-public class ManageStaff implements IManageStaff {
+public class ManageStaff extends User implements IManageStaff {
 
 	private List<Doctor> doctors;
-	private List<Pharmacist> pharmacists;
+	private List<Pharmacist> Pharmacist;
 
-	public ManageStaff() {
-		// TODO - implement ManageStaff.ManageStaff
-		throw new UnsupportedOperationException();
-	}
-	
 	/**
 	 * 
 	 * @param role
@@ -25,6 +17,11 @@ public class ManageStaff implements IManageStaff {
 	 */
 	public void viewStaff(String role, String gender, int age) {
 		// TODO - implement ManageStaff.viewStaff
+		throw new UnsupportedOperationException();
+	}
+
+	public ManageStaff() {
+		// TODO - implement ManageStaff.ManageStaff
 		throw new UnsupportedOperationException();
 	}
 

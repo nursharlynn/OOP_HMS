@@ -59,4 +59,9 @@ public class Schedule {
 		throw new UnsupportedOperationException();
 	}
 
+	public void displayAvailableSlots() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -18,9 +18,12 @@ public class Appointment extends TimeSlot {
 	 * @param start
 	 * @param end
 	 */
-	public Appointment(LocalDateTime start, LocalDateTime end) {
+	public Appointment() {
+        // Initialize default values if necessary
+    }
+	
+	public Appointment(LocalDateTime start, LocalDateTime end){
 		// TODO - implement Appointment.Appointment
-		super(start, end);
 		throw new UnsupportedOperationException();
 	}
 
@@ -65,5 +68,22 @@ public class Appointment extends TimeSlot {
 		// TODO - implement Appointment.toString
 		throw new UnsupportedOperationException();
 	}
+
+	public void setPrescriptionStatus(String status) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getDoctorId() {
+		// TODO Auto-generated method stub
+		return getDoctorId();
+	}
+
+
+	public boolean isPending() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 }

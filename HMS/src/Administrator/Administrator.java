@@ -13,31 +13,35 @@ public class Administrator extends User {
 
 	/**
 	 * 
-     * @param hospitalId
-     * @param password
-     * @param name
-     * @param gender
-     * @param age
-     * @param invHandler
-     * @param reqHandler
-     */
-    public Administrator(String hospitalId, String password, String name, String gender, int age) {
-        super(hospitalId, password, name, gender, age);
-        throw new UnsupportedOperationException();
-    }
-    
+	 * @param hospitalID
+	 * @param password
+	 * @param name
+	 * @param gender
+	 * @param age
+	 */
+	
+	public Administrator(String hospitalID, String password, String name, String gender, int age) {
+		// TODO - implement Administrator.Administrator
+		throw new UnsupportedOperationException();
+	}
 
-    public void setInvHandler(IInventory invHandler) {
-        this.invHandler = invHandler;
-    }
+	/**
+	 * 
+	 * @param invHandler
+	 */
+	public Administrator(IInventory invHandler) {
+		// TODO - implement Administrator.Administrator
+		throw new UnsupportedOperationException();
+	}
 
-    public void setReqHandler(Collection<IRequestManager> reqHandler) {
-        this.reqHandler = reqHandler;
-    }
-
-    public void setStaffHandler(IManageStaff staffHandler) {
-        this.staffHandler = staffHandler;
-    }
+	/**
+	 * 
+	 * @param reqHandler
+	 */
+	public Administrator(IRequestManager reqHandler) {
+		// TODO - implement Administrator.Administrator
+		throw new UnsupportedOperationException();
+	}
 
 	public void viewScheduledAppointments() {
 		// TODO - implement Administrator.viewScheduledAppointments

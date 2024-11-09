@@ -1,5 +1,6 @@
 package Appointment;
 
+import java.io.ObjectInputFilter.Status;
 import java.time.LocalDateTime;
 
 public class TimeSlot {
@@ -14,6 +15,9 @@ public class TimeSlot {
 	 * @param startTime
 	 * @param endTime
 	 */
+	public TimeSlot() {
+        // Initialize default values if necessary
+    }
 	public TimeSlot(LocalDateTime startTime, LocalDateTime endTime) {
 		// TODO - implement TimeSlot.TimeSlot
 		throw new UnsupportedOperationException();

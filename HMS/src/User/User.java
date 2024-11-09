@@ -9,6 +9,7 @@ public class User {
 	private int age;
 	private int pharmacistId;
 	private int doctorId;
+	private String role;
 
 	/**
 	 * 
@@ -18,7 +19,15 @@ public class User {
 	 * @param gender
 	 * @param age
 	 */
+
+
 	public User(String hospitalId, String password, String name, String gender, int age) {
+		this.hospitalId = hospitalId;
+		this.password = "password";
+		this.name = name;
+		this.gender = gender;
+		this.age = age;
+		
 		// TODO - implement User.User
 		throw new UnsupportedOperationException();
 	}
@@ -28,14 +37,22 @@ public class User {
 	 * @param enteredId
 	 * @param enteredPass
 	 */
-	public void login(String enteredId, String enteredPass) {
-		// TODO - implement User.login
-		throw new UnsupportedOperationException();
+	
+	public boolean login(String enteredId, String enteredPass) {
+		
+		if (this.hospitalId.equals(enteredId) && this.password.equals(enteredPass)) {
+            System.out.println("Login successful. Welcome, " + name + "!");
+            // Role-specific access would be checked elsewhere in the system
+            return true;
+        } else {
+            System.out.println("Invalid credentials.");
+            return false;
+        }
+	
 	}
 
 	public void logout() {
-		// TODO - implement User.logout
-		throw new UnsupportedOperationException();
+		System.out.println(name + " has logged out.");
 	}
 
 	/**
@@ -43,18 +60,20 @@ public class User {
 	 * @param newPassword
 	 */
 	public void changePassword(String newPassword) {
-		// TODO - implement User.changePassword
-		throw new UnsupportedOperationException();
+		this.password = newPassword;
+        System.out.println("Password updated successfully.");
+	}
+	
+	//All Getters and Setters
+	
+	public String getRole() {
+		return this.role;
 	}
 
 	public String getName() {
 		return this.name;
 	}
-
-	/**
-	 * 
-	 * @param name
-	 */
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -63,10 +82,6 @@ public class User {
 		return this.gender;
 	}
 
-	/**
-	 * 
-	 * @param gender
-	 */
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
@@ -75,10 +90,6 @@ public class User {
 		return this.age;
 	}
 
-	/**
-	 * 
-	 * @param age
-	 */
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -89,6 +100,11 @@ public class User {
 
 	public int getDoctorId() {
 		return this.doctorId;
+	}
+
+	public String getHospitalId() {
+		// TODO Auto-generated method stub
+		return getHospitalId();
 	}
 
 }

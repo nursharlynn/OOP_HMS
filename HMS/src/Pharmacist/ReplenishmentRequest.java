@@ -1,82 +1,49 @@
 package Pharmacist;
 
-import Administrator.*;
+import Administrator.Medicine;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReplenishmentRequest {
 
-	private int requestId;
-	private Medicine medicine;
-	private Pharmacist pharmacist;
-	private int quantity;
+    private static final AtomicInteger idCounter = new AtomicInteger(0);
+    private int requestId;
+    private String medicineName;
+    private Pharmacist requester;
+    private int quantity;
 
-	/**
-	 * 
-	 * @param medicine
-	 * @param requester
-	 * @param quantity
-	 */
-	public ReplenishmentRequest(String medicine, String requester, int quantity) {
-		// TODO - implement ReplenishmentRequest.ReplenishmentRequest
-		throw new UnsupportedOperationException();
-	}
+    public ReplenishmentRequest(String medicineName, Pharmacist requester, int quantity) {
+        this.requestId = generateId();
+        this.medicineName = medicineName;
+        this.requester = requester;
+        this.quantity = quantity;
+    }
 
-	public void getRequestId() {
-		// TODO - implement ReplenishmentRequest.getRequestId
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * Generate a unique ID for the request.
+     * @return Unique ID.
+     */
+    private int generateId() {
+        return idCounter.incrementAndGet();
+    }
 
-	/**
-	 * 
-	 * @param requestId
-	 */
-	public void setRequestId(int requestId) {
-		this.requestId = requestId;
-	}
+    public int getRequestId() {
+        return requestId;
+    }
 
-	public void getMedicineName() {
-		// TODO - implement ReplenishmentRequest.getMedicineName
-		throw new UnsupportedOperationException();
-	}
+    public String getMedicineName() {
+        return medicineName;
+    }
 
-	/**
-	 * 
-	 * @param medicineName
-	 */
-	public void setMedicineName(int medicineName) {
-		// TODO - implement ReplenishmentRequest.setMedicineName
-		throw new UnsupportedOperationException();
-	}
+    public Pharmacist getRequester() {
+        return requester;
+    }
 
-	public void getPharmacistName() {
-		// TODO - implement ReplenishmentRequest.getPharmacistName
-		throw new UnsupportedOperationException();
-	}
+    public int getQuantity() {
+        return quantity;
+    }
 
-	/**
-	 * 
-	 * @param pharmacistName
-	 */
-	public void setPharmacistName(int pharmacistName) {
-		// TODO - implement ReplenishmentRequest.setPharmacistName
-		throw new UnsupportedOperationException();
-	}
-
-	public void getQuantity() {
-		// TODO - implement ReplenishmentRequest.getQuantity
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param quantity
-	 */
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public int generateId() {
-		// TODO - implement ReplenishmentRequest.generateId
-		throw new UnsupportedOperationException();
-	}
-
+    @Override
+    public String toString() {
+        return "ReplenishmentRequest[ID: " + requestId + ", Medicine: " + medicineName + ", Quantity: " + quantity + "]";
+    }
 }

@@ -1,81 +1,86 @@
 package Records;
 
+import Administrator.*;
+import Patient.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import Administrator.*;
-import Patient.*;
-
 public class MedicalRecord {
 
-	private ArrayList<String> diagnoses;
-	private ArrayList<String> treatments;
-	private List<String> prescription;
-	private LocalDateTime date;
+    private ArrayList<String> diagnoses;
+    private ArrayList<String> treatments;
+    private List<Medicine> prescription; // Updated type to List<Medicine> based on prescription data
+    //private ViewMedicalRecord viewRecord; // Assuming this is for displaying medical records
+    private LocalDateTime date;
 
-	public MedicalRecord() {
-		// TODO - implement MedicalRecord.MedicalRecord
-		throw new UnsupportedOperationException();
+    // Constructor
+    public MedicalRecord() {
+        this.diagnoses = new ArrayList<>();
+        this.treatments = new ArrayList<>();
+        this.prescription = new ArrayList<>();
+        this.date = LocalDateTime.now(); // Initialize with the current date and time
+    }
+
+    // Getter for prescription
+    public List<Medicine> getPrescription() {
+        return prescription;
+    }
+
+    // Setter for prescription
+    public void setPrescription(List<Medicine> prescription) {
+        this.prescription = prescription;
+    }
+
+    // Getter for treatments
+    public ArrayList<String> getTreatments() {
+        return treatments;
+    }
+
+    // Setter for treatments
+    public void setTreatments(ArrayList<String> treatments) {
+        this.treatments = treatments;
+    }
+
+    // Getter for diagnoses
+    public ArrayList<String> getDiagnoses() {
+        return diagnoses;
+    }
+
+    // Setter for diagnoses
+    public void setDiagnoses(ArrayList<String> diagnoses) {
+        this.diagnoses = diagnoses;
+    }
+
+    // View medical record for a given patient
+    public void viewMedicalRecord(Patient patient) {
+        // For now, we print the record; this can be adapted to a GUI or CLI display
+        System.out.println("Medical Record for Patient: " + patient.getName());
+        System.out.println("Diagnoses: " + String.join(", ", diagnoses));
+        System.out.println("Treatments: " + String.join(", ", treatments));
+        System.out.println("Prescriptions: ");
+        for (Medicine med : prescription) {
+            System.out.println(" - " + getMedicineName());
+        }
+        System.out.println("Record Date: " + date);
+    }
+
+    private String getMedicineName() {
+		return getMedicineName();
 	}
 
-	public ArrayList<Medicine> getPrescription() {
-		// TODO - implement MedicalRecord.getPrescription
-		throw new UnsupportedOperationException();
-	}
+	// Getter for date
+    public LocalDateTime getDate() {
+        return date;
+    }
 
-	/**
-	 * 
-	 * @param prescription
-	 */
-	public void setPrescription(List<Medicine> prescription) {
-		// TODO - implement MedicalRecord.setPrescription
-		throw new UnsupportedOperationException();
-	}
+    // Setter for date
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 
-	public ArrayList<String> getTreatments() {
-		return this.treatments;
+	public void updateRecord(String patientId, String newDiagnosis, String prescriptions, String newTreatment) {
+		// TODO Auto-generated method stub
+		
 	}
-
-	/**
-	 * 
-	 * @param treatments
-	 */
-	public void setTreatments(ArrayList<String> treatments) {
-		this.treatments = treatments;
-	}
-
-	public ArrayList<String> getDiagnoses() {
-		return this.diagnoses;
-	}
-
-	/**
-	 * 
-	 * @param diagnoses
-	 */
-	public void setDiagnoses(ArrayList<String> diagnoses) {
-		this.diagnoses = diagnoses;
-	}
-
-	/**
-	 * 
-	 * @param patient
-	 */
-	public void viewMedicalRecord(Patient patient) {
-		// TODO - implement MedicalRecord.viewMedicalRecord
-		throw new UnsupportedOperationException();
-	}
-
-	public LocalDateTime getDate() {
-		return this.date;
-	}
-
-	/**
-	 * 
-	 * @param date
-	 */
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
 }

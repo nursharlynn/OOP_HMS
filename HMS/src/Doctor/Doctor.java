@@ -1,10 +1,8 @@
 package Doctor;
 
 import User.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
 import Appointment.*;
 import Records.*;
 
@@ -21,41 +19,34 @@ public class Doctor extends User {
 	 * @param gender
 	 * @param age
 	 */
-	public Doctor(String hospitalId, String password, String name, String gender, int age) {
-		// TODO - implement Doctor.Doctor
-		super(hospitalId, password, name, gender, age);
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param apptHandler
-	 */
-	public void setApptHandler(IAppointment apptHandler) {
+	// Main constructor that initializes all attributes, calling the superclass constructor
+    public Doctor(String hospitalId, String password, String name, String gender, int age, Schedule schedule, IAppointment apptHandler) {
+        super(hospitalId, password, name, gender, age); // Call User constructor
+        this.schedule = schedule;
         this.apptHandler = apptHandler;
     }
 
-	/**
-	 * 
-	 * @param schedule
-	 */
-	public void setSchedule(Schedule schedule) {
+    // Constructor when only appointment handler is provided
+    public Doctor(String hospitalId, String password, String name, String gender, int age, IAppointment apptHandler) {
+        super(hospitalId, password, name, gender, age); // Call User constructor
+        this.apptHandler = apptHandler;
+    }
+
+    // Constructor when only schedule is provided
+    public Doctor(String hospitalId, String password, String name, String gender, int age, Schedule schedule) {
+        super(hospitalId, password, name, gender, age); // Call User constructor
         this.schedule = schedule;
     }
 
-	public List<String> viewPersonalSchedule() {
-		// TODO - implement Doctor.viewPersonalSchedule
-		throw new UnsupportedOperationException();
+	public List<TimeSlot> viewPersonalSchedule() {
+		 return schedule.getDailySchedule();
 	}
 
 	/**
 	 * 
 	 * @param start
 	 */
-	public boolean updateAvailability(LocalDateTime start) {
-		// TODO - implement Doctor.updateAvailability
-		throw new UnsupportedOperationException();
-	}
+	
 
 	/**
 	 * 
@@ -65,13 +56,16 @@ public class Doctor extends User {
 	 * @param newTreatment
 	 */
 	public void updatePatientMedicalRecords(String patientId, String newDiagnosis, String prescriptions, String newTreatment) {
-		// TODO - implement Doctor.updatePatientMedicalRecords
-		throw new UnsupportedOperationException();
+		 medicalRecord.updateRecord(patientId, newDiagnosis, prescriptions, newTreatment); // Assumes MedicalRecord has this method
+	}
+	
+	
+	public String toString() {
+		return "Doctor: " + getName() + " (" + gethospitalId() + ")";
 	}
 
-	public String toString() {
-		// TODO - implement Doctor.toString
-		throw new UnsupportedOperationException();
+	public String gethospitalId() {
+		 return gethospitalId();
 	}
 
 }
