@@ -1,9 +1,10 @@
 package Doctor;
 
 import User.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Doctor extends User {
 
@@ -70,29 +71,41 @@ public class Doctor extends User {
 
     public void setAvailability() {
         Scanner scanner = new Scanner(System.in);
-
         String date;
         String time;
-        String datePattern = "^\\d{4}-\\d{2}-\\d{2}$";
-        String timePattern = "^\\d{2}:\\d{2}$";
 
         while (true) {
             System.out.print("Enter Date (YYYY-MM-DD): ");
             date = scanner.nextLine();
-            if (Pattern.matches(datePattern, date)) {
+            try {
+                LocalDate.parse(date); 
                 break;
-            } else {
-                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format or value. Please use YYYY-MM-DD and ensure the date is valid.");
             }
         }
 
         while (true) {
             System.out.print("Enter Time (HH:MM): ");
             time = scanner.nextLine();
-            if (Pattern.matches(timePattern, time)) {
-                break;
-            } else {
+
+            String[] timeParts = time.split(":");
+            if (timeParts.length != 2) {
                 System.out.println("Invalid time format. Please use HH:MM.");
+                continue; 
+            }
+
+            try {
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+
+                if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+                    System.out.println("Invalid time. Please ensure the time is within 00:00 to 23:59.");
+                    continue;
+                }
+                break; 
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid time. Please ensure the time is in the correct format.");
             }
         }
 

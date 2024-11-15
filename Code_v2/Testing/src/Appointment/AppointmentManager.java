@@ -14,7 +14,6 @@ public class AppointmentManager {
             Path path = Path.of(appointmentFilePath);
             List<String> lines = Files.readAllLines(path);
 
-            // Check if there are any appointments
             if (lines.size() <= 1) {
                 System.out.println("No appointments found.");
                 return;
@@ -23,23 +22,21 @@ public class AppointmentManager {
             // Print header
             System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s %-15s%n",
                     "Appt ID", "Doctor Name", "Date", "Time", "Status", "Patient ID", "Patient Name");
-            System.out.println("-".repeat(105)); // Adjusted separator line length
+            System.out.println("-".repeat(105)); 
 
-            // Iterate through the lines and print appointment details
-            for (String line : lines.subList(1, lines.size())) { // Skip header
+            for (String line : lines.subList(1, lines.size())) { 
                 String[] data = line.split(",");
-                // Determine Patient ID and Patient Name based on availability
-                String patientId = (data.length > 5 && !data[5].isEmpty()) ? data[5] : "N/A"; // Patient ID
-                String patientName = (data.length > 6 && !data[6].isEmpty()) ? data[6] : "N/A"; // Patient Name
+                String patientId = (data.length > 5 && !data[5].isEmpty()) ? data[5] : "N/A"; 
+                String patientName = (data.length > 6 && !data[6].isEmpty()) ? data[6] : "N/A"; 
 
                 System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s %-15s%n",
-                        data[0], // Appointment ID
-                        data[1], // Doctor Name
-                        data[2], // Date
-                        data[3], // Time
-                        data[4], // Status
-                        patientId, // Patient ID
-                        patientName); // Patient Name
+                        data[0], 
+                        data[1], 
+                        data[2], 
+                        data[3], 
+                        data[4], 
+                        patientId, 
+                        patientName); 
             }
         } catch (IOException e) {
             System.out.println("Error reading appointments: " + e.getMessage());

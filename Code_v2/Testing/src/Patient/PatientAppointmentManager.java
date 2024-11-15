@@ -64,21 +64,17 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
     @Override
     public void rescheduleAppointments(String hospitalId) {
         try {
-            // Get booked appointments
             List<String[]> patientBookedAppointments = getPatientBookedAppointments(hospitalId);
 
-            // Display and get selected appointment
             int appointmentChoice = displayBookedAppointments(patientBookedAppointments);
             if (appointmentChoice == -1)
                 return;
 
-            // Get current appointment details
             String[] currentAppointment = patientBookedAppointments.get(appointmentChoice - 1);
             int currentAppointmentId = Integer.parseInt(currentAppointment[0]);
 
             System.out.println("\nSelect a new appointment to reschedule your current appointment.");
 
-            // View available slots
             List<String[]> availableAppointments = viewAvailableSlots();
 
             if (availableAppointments.isEmpty()) {
@@ -108,7 +104,6 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
             String[] data = lines.get(i).split(",");
 
             if (Integer.parseInt(data[0]) == currentAppointmentId) {
-                // Reset the current appointment to available
                 lines.set(i, String.format("%s,%s,%s,%s,Available,,",
                         data[0], data[1], data[2], data[3]));
                 currentAppointmentFound = true;
@@ -116,7 +111,6 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
 
             if (Integer.parseInt(data[0]) == newAppointmentId) {
                 if (data.length >= 5 && data[4].trim().equalsIgnoreCase("Available")) {
-                    // Find the patient's name from the current booked appointment
                     String patientName = "";
                     for (String[] searchData : getPatientBookedAppointments(hospitalId)) {
                         if (Integer.parseInt(searchData[0]) == currentAppointmentId) {
@@ -125,7 +119,6 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                         }
                     }
 
-                    // Book the new appointment with patient details
                     lines.set(i, String.format("%s,%s,%s,%s,Booked,%s,%s",
                             data[0], data[1], data[2], data[3], hospitalId, patientName));
                     newAppointmentFound = true;
@@ -149,19 +142,15 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
     @Override
     public void cancelAppointment(String hospitalId) {
         try {
-            // Get booked appointments
             List<String[]> patientBookedAppointments = getPatientBookedAppointments(hospitalId);
 
-            // Display and get selected appointment
             int appointmentChoice = displayBookedAppointments(patientBookedAppointments);
             if (appointmentChoice == -1)
                 return;
 
-            // Get appointment details to cancel
             String[] appointmentToCancel = patientBookedAppointments.get(appointmentChoice - 1);
             int appointmentId = Integer.parseInt(appointmentToCancel[0]);
 
-            // Perform cancellation
             performCancellation(appointmentId, hospitalId);
 
         } catch (IOException e) {
@@ -178,13 +167,11 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
         for (int i = 1; i < lines.size(); i++) {
             String[] data = lines.get(i).split(",");
 
-            // Find the specific booked appointment
             if (Integer.parseInt(data[0]) == appointmentId &&
                     data.length > 5 &&
                     data[4].trim().equalsIgnoreCase("Booked") &&
                     data[5].trim().equals(hospitalId)) {
 
-                // Change the status back to Available and clear patient details
                 lines.set(i, String.format("%s,%s,%s,%s,Available,,",
                         data[0], data[1], data[2], data[3]));
 
@@ -194,7 +181,6 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
         }
 
         if (appointmentFound) {
-            // Write the updated lines back to the file
             Files.write(Paths.get(APPOINTMENTS_FILE), lines);
             System.out.println("Appointment successfully canceled.");
         } else {
@@ -220,14 +206,13 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                 if (Integer.parseInt(data[0]) == appointmentId &&
                         data[4].trim().equalsIgnoreCase("Available")) {
 
-                    // Updated to include patient name
                     lines.set(i, String.format("%s,%s,%s,%s,Booked,%s,%s",
-                            data[0], // Appointment ID
-                            data[1], // Doctor Name
-                            data[2], // Date
-                            data[3], // Time
-                            patient.getHospitalId(), // Patient ID
-                            patient.getName() // Patient Name
+                            data[0], 
+                            data[1], 
+                            data[2], 
+                            data[3], 
+                            patient.getHospitalId(), 
+                            patient.getName() 
                     ));
 
                     appointmentFound = true;
@@ -288,8 +273,6 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
         try {
             Path path = Paths.get(APPOINTMENTS_FILE);
             List<String> lines = Files.readAllLines(path);
-
-            // Filter appointments for the specific patient
             List<String[]> patientAppointments = lines.stream()
                     .skip(1)
                     .map(line -> line.split(","))
@@ -297,13 +280,11 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                             data[5].trim().equals(hospitalId))
                     .collect(Collectors.toList());
 
-            // Check if patient has any scheduled appointments
             if (patientAppointments.isEmpty()) {
                 System.out.println("No scheduled appointments found.");
                 return;
             }
 
-            // Display the scheduled appointments
             System.out.println("\n=== Your Scheduled Appointments ===");
             System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s%n",
                     "Appt ID", "Doctor Name", "Date", "Time", "Status", "Patient Name");

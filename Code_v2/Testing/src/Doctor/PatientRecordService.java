@@ -21,7 +21,6 @@ public class PatientRecordService {
                 return;
             }
 
-            // Display the list of patients
             System.out.println("\n=== Patients You Can Update ===");
             System.out.printf("%-5s %-15s %-20s %-15s%n",
                     "No.", "Patient ID", "Patient Name", "Appointment Date");
@@ -31,13 +30,12 @@ public class PatientRecordService {
                 String[] patient = doctorPatients.get(i);
                 System.out.printf("%-5d %-15s %-20s %-15s%n",
                         i + 1,
-                        patient[5], // Patient ID
-                        patient[6], // Patient Name
-                        patient[2] // Appointment Date
+                        patient[5], 
+                        patient[6], 
+                        patient[2] 
                 );
             }
 
-            // Prompt for patient selection
             System.out.print("\nEnter the number of the patient to view their medical record: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); 
@@ -47,10 +45,8 @@ public class PatientRecordService {
                 return;
             }
 
-            // Get selected patient details
-            String patientId = doctorPatients.get(choice - 1)[5]; // Patient ID
+            String patientId = doctorPatients.get(choice - 1)[5]; 
 
-            // Retrieve the patient's medical record
             PatientRecord record = recordManager.getPatientRecord(patientId);
 
             if (record != null) {

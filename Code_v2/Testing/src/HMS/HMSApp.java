@@ -20,7 +20,6 @@ public class HMSApp {
         this.scanner = new Scanner(System.in);
         this.passwordManager = new PasswordManager(loginSystem);
 
-        // Load all data when application starts
         DataLoader dataLoader = new DataLoader(loginSystem);
         dataLoader.loadAllData();
     }
@@ -76,12 +75,10 @@ public class HMSApp {
         if (currentUser != null) {
             System.out.println("Login successful!");
 
-            // Handle first-time login
             if (currentUser.isFirstLogin()) {
                 passwordManager.handleFirstTimeLogin(currentUser);
             }
 
-            // Display role-specific menu
             boolean continueSession = true;
             while (continueSession) {
                 currentUser.displayMenu();

@@ -83,7 +83,6 @@ public class Patient extends User {
         }
     }
 
-    // Existing getters and setters with minimal implementation
     public String getName() {
         return this.name;
     }
@@ -148,10 +147,8 @@ public class Patient extends User {
     public void updatePersonalInformation(LoginSystem loginSystem) {
         System.out.println("\n=== Update Personal Information ===");
     
-        // Current contact information
         System.out.println("Current Contact: " + this.contact);
     
-        // Prompt for new contact
         System.out.print("Enter new contact (press enter to keep current): ");
         String newContact = scanner.nextLine().trim();
     
@@ -159,7 +156,6 @@ public class Patient extends User {
             this.contact = newContact;
             System.out.println("Contact updated successfully.");
     
-            // Update the patient data in the CSV file
             DataLoader dataLoader = new DataLoader(loginSystem); 
             try {
                 dataLoader.updatePatientContact(this.getPatientID(), newContact);
@@ -172,7 +168,6 @@ public class Patient extends User {
     }
 
     public void scheduleAppointment() {
-        // View available slots
         List<String[]> availableAppointments = ((PatientAppointmentManager) apptHandler).viewAvailableSlots();
 
         if (availableAppointments.isEmpty()) {
@@ -180,11 +175,9 @@ public class Patient extends User {
             return;
         }
 
-        // Prompt for appointment ID
         System.out.print("Enter the Appointment ID you want to book: ");
         int appointmentId = scanner.nextInt();
 
-        // Schedule the appointment
         apptHandler.scheduleAppointments(this, appointmentId);
     }
 

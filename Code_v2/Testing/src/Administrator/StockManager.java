@@ -14,15 +14,13 @@ public class StockManager {
     }
 
     public void manageStockLevels() {
-        List<Medicine> medicines = dataLoader.getAllMedicines(); // Load current medicines
+        List<Medicine> medicines = dataLoader.getAllMedicines(); 
 
-        // Check if there are any medicines
         if (medicines.isEmpty()) {
             System.out.println("No medicines available.");
             return;
         }
 
-        // Display the list of medicines
         System.out.println("\n=== Select Medicine to Update Stock ===");
         for (int i = 0; i < medicines.size(); i++) {
             Medicine medicine = medicines.get(i);
@@ -32,7 +30,6 @@ public class StockManager {
                     medicine.getStock());
         }
 
-        // Prompt for selection
         System.out.print("Select the number of the medicine to update: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -44,7 +41,6 @@ public class StockManager {
 
         Medicine selectedMedicine = medicines.get(choice - 1);
 
-        // Prompt for the amount to add
         System.out.print("Enter the amount to add to stock: ");
         int amountToAdd = scanner.nextInt();
         scanner.nextLine();
@@ -54,7 +50,6 @@ public class StockManager {
             return;
         }
 
-        // Update the stock
         selectedMedicine.addStock(amountToAdd);
         dataLoader.saveMedicines(medicines);
 

@@ -19,7 +19,6 @@ public class MedicalRecord {
         this.prescription = new ArrayList<>();
     }
 
-    // Method to view medical record
     public void viewMedicalRecord(Patient patient) {
         System.out.println("--- Patient Medical Record ---");
         System.out.println("Patient ID: " + patient.getPatientID());
@@ -29,14 +28,12 @@ public class MedicalRecord {
         System.out.println("Contact Information: " + patient.getContact());
         System.out.println("Blood Type: " + patient.getBloodType());
 
-        // Display current diagnosis and treatment
         System.out.println("\nCurrent Diagnosis: " +
                 (patient.getDiagnosis().isEmpty() ? "No current diagnosis" : patient.getDiagnosis()));
         System.out.println("Current Treatment: " +
                 (patient.getTreatment().isEmpty() ? "No current treatment" : patient.getTreatment()));
     }
 
-    // Getters and setters
     public void addDiagnosis(String diagnosis) {
         this.diagnoses.add(diagnosis);
     }

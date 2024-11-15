@@ -91,7 +91,6 @@ public class ReplenishmentRequestApprovalManager {
 
         for (Medicine medicine : medicines) {
             if (medicine.getMedicineName().equalsIgnoreCase(medicineName)) {
-                // Increase the stock by the requested amount
                 medicine.addStock(requestAmount);
                 System.out.println("Stock updated for " + medicineName + ". New stock: " + medicine.getStock());
                 medicineExists = true;
@@ -99,7 +98,6 @@ public class ReplenishmentRequestApprovalManager {
             }
         }
 
-        // If the medicine does not exist, prompt for low stock alert and add it
         if (!medicineExists) {
             System.out.println("Medicine " + medicineName + " does not exist in the inventory.");
             Scanner scanner = new Scanner(System.in);

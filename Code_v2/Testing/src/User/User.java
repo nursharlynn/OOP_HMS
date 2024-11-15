@@ -43,7 +43,6 @@ public abstract class User {
         return isFirstLogin;
     }
 
-    // Password methods
     public boolean checkPassword(String inputPassword) {
         return this.password.equals(inputPassword);
     }
@@ -51,15 +50,12 @@ public abstract class User {
     public void changePassword(String newPassword) {
         this.password = newPassword;
         this.isFirstLogin = false;
-        //System.out.println("Password changed successfully.");
     }
 
-    // Abstract method that all user types must implement
     public abstract void displayMenu();
 
     public abstract void handleMenuChoice(int choice);
 
-    // Setters
     public void setFirstLogin(boolean firstLogin) {
         this.isFirstLogin = firstLogin;
     }

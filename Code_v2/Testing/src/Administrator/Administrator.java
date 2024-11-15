@@ -101,7 +101,6 @@ public class Administrator extends User {
                     System.out.print("Enter staff role (Doctor/Pharmacist/Administrator): ");
                     String role = scanner.nextLine();
 
-                    // Prompt for user details
                     System.out.print("Enter Hospital ID: ");
                     String hospitalId = scanner.nextLine();
 

@@ -43,7 +43,6 @@ public class DataLoader {
                 String gender = data[3].trim();
                 int age = Integer.parseInt(data[4].trim()); 
 
-                 // Create user based on role with default password "password"
                  User user = createUserByRole(staffId, name, role, gender, age);
                  if (user != null) {
                     loginSystem.addUser(user);
@@ -83,11 +82,9 @@ public class DataLoader {
                 String bloodType = data[4].trim();
                 String contact = data[5].trim();
 
-                // Check if diagnosis and treatment columns exist
                 String diagnosis = data.length > 6 ? data[6].trim() : "";
                 String treatment = data.length > 7 ? data[7].trim() : "";
 
-                // Create patient with additional medical information
                 Patient patient = new Patient(patientId, "password", name, dateOfBirth, gender, bloodType, contact, 0);
 
                 patient.setDiagnosis(diagnosis);
@@ -189,7 +186,6 @@ public class DataLoader {
 
         try (BufferedReader br = new BufferedReader(new FileReader(staffFilePath))) {
             String line;
-            // Skip the header line
             br.readLine();
 
             while ((line = br.readLine()) != null) {
@@ -203,10 +199,9 @@ public class DataLoader {
                 String gender = data[3].trim();
                 int age = Integer.parseInt(data[4].trim()); 
 
-                // Create a User object based on the role
                 User user = createUserByRole(staffId, name, role, gender, age);
                 if (user != null) {
-                    staffList.add(user); // Add the user to the staff list
+                    staffList.add(user); 
                 }
             }
         } catch (IOException e) {
