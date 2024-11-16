@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class DoctorAppointmentManager implements IAppointmentRepository {
 
 	private Scanner scanner;
-	private static final String APPOINTMENTS_CSV = "appointments.csv"; 
 
 	public DoctorAppointmentManager() {
 		this.scanner = new Scanner(System.in);
@@ -32,12 +31,11 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 			List<String> lines = Files.readAllLines(path);
 
 			List<String[]> doctorAppointments = lines.stream()
-					.skip(1) 
+					.skip(1)
 					.map(line -> line.split(","))
 					.filter(data -> data.length > 4 &&
-							data[1].trim().equalsIgnoreCase(doctor.getName()) && 
-							data[4].trim().equalsIgnoreCase("Booked") 
-					)
+							data[1].trim().equalsIgnoreCase(doctor.getName()) &&
+							data[4].trim().equalsIgnoreCase("Booked"))
 					.collect(Collectors.toList());
 
 			if (doctorAppointments.isEmpty()) {
@@ -54,12 +52,11 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 				String[] appointment = doctorAppointments.get(i);
 				System.out.printf("%-5d %-15s %-15s %-20s %-15s %-15s%n",
 						i + 1,
-						appointment[0], 
-						appointment[5], 
-						appointment[6], 
-						appointment[2], 
-						appointment[3] 
-				);
+						appointment[0],
+						appointment[5],
+						appointment[6],
+						appointment[2],
+						appointment[3]);
 			}
 
 			System.out.println("\nOptions:");
@@ -68,7 +65,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 			System.out.print("Your choice: ");
 			int choice = scanner.nextInt();
-			scanner.nextLine(); 
+			scanner.nextLine();
 
 			if (choice == 0) {
 				System.out.println("Action cancelled.");
@@ -96,7 +93,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 			System.out.print("Your choice: ");
 			int action = scanner.nextInt();
-			scanner.nextLine(); 
+			scanner.nextLine();
 
 			return processAppointmentAction(selectedAppointment[0], action);
 
@@ -116,19 +113,19 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 				if (data[0].equals(appointmentId)) {
 					switch (action) {
-						case 1: 
+						case 1:
 							lines.set(i, String.format("%s,%s,%s,%s,Confirmed,%s,%s",
 									data[0], data[1], data[2], data[3],
 									data[5], data[6]));
 							System.out.println("Appointment accepted successfully.");
 							break;
-						case 2: 
+						case 2:
 							lines.set(i, String.format("%s,%s,%s,%s,Cancelled,%s,%s",
 									data[0], data[1], data[2], data[3],
 									data[5], data[6]));
-							System.out.println("Appointment declined successfully. Slot is now available.");				
+							System.out.println("Appointment declined successfully. Slot is now available.");
 							break;
-						case 0: 
+						case 0:
 							System.out.println("Action cancelled.");
 							return false;
 						default:
@@ -145,9 +142,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 			return false;
 		}
 	}
-	
 
-	
 	public void recordAppointmentOutcome(Doctor doctor) {
 		try {
 			List<String> availableMedicines = DataLoader.readAvailableMedicines();
@@ -156,14 +151,12 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 			List<String> lines = Files.readAllLines(path);
 
 			List<String[]> confirmedAppointments = lines.stream()
-					.skip(1) 
+					.skip(1)
 					.map(line -> line.split(","))
 					.filter(data -> data.length > 4 &&
-							data[1].trim().equalsIgnoreCase(doctor.getName()) && 
-							data[4].trim().equalsIgnoreCase("Confirmed") 
-					)
+							data[1].trim().equalsIgnoreCase(doctor.getName()) &&
+							data[4].trim().equalsIgnoreCase("Confirmed"))
 					.collect(Collectors.toList());
-
 
 			System.out.println("\n=== Your Confirmed Appointments ===");
 			System.out.printf("%-5s %-15s %-15s %-20s %-15s %-15s%n",
@@ -175,11 +168,10 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 				System.out.printf("%-5d %-15s %-15s %-20s %-15s %-15s%n",
 						i + 1,
 						appointment[0],
-						appointment[5], 
-						appointment[6], 
-						appointment[2], 
-						appointment[3] 
-				);
+						appointment[5],
+						appointment[6],
+						appointment[2],
+						appointment[3]);
 			}
 
 			System.out.println("\nEnter the number of the appointment to record outcome");
@@ -187,7 +179,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 			System.out.print("Your choice: ");
 			int choice = scanner.nextInt();
-			scanner.nextLine(); 
+			scanner.nextLine();
 
 			if (choice == 0) {
 				System.out.println("Action cancelled.");
@@ -214,7 +206,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 				System.out.print("Choose a medicine (number): ");
 				int medicineChoice = scanner.nextInt();
-				scanner.nextLine(); 
+				scanner.nextLine();
 
 				if (medicineChoice == 0)
 					break;
@@ -228,7 +220,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 				System.out.print("Enter quantity for " + chosenMedicine + ": ");
 				int quantity = scanner.nextInt();
-				scanner.nextLine(); 
+				scanner.nextLine();
 
 				prescribedMedications.add(chosenMedicine + ":" + quantity);
 			}
@@ -237,15 +229,14 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 			String consultationNotes = scanner.nextLine();
 
 			writeAppointmentOutcome(
-					Integer.parseInt(selectedAppointment[0]), 
+					Integer.parseInt(selectedAppointment[0]),
 					doctor.getName(),
-					selectedAppointment[2], 
+					selectedAppointment[2],
 					servicesProvided,
 					prescribedMedications,
 					consultationNotes,
-					selectedAppointment[5], 
-					selectedAppointment[6] 
-			);
+					selectedAppointment[5],
+					selectedAppointment[6]);
 
 			System.out.println("Appointment outcome recorded successfully!");
 
@@ -304,12 +295,11 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 			List<String> lines = Files.readAllLines(path);
 
 			List<String[]> upcomingAppointments = lines.stream()
-					.skip(1) 
+					.skip(1)
 					.map(line -> line.split(","))
 					.filter(data -> data.length > 4 &&
-							data[1].trim().equalsIgnoreCase(doctor.getName()) && 
-							data[4].trim().equalsIgnoreCase("Confirmed") 
-					)
+							data[1].trim().equalsIgnoreCase(doctor.getName()) &&
+							data[4].trim().equalsIgnoreCase("Confirmed"))
 					.collect(Collectors.toList());
 
 			if (upcomingAppointments.isEmpty()) {
@@ -326,13 +316,12 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 
 			for (String[] appointment : upcomingAppointments) {
 				System.out.printf("%-10s %-20s %-15s %-15s %-15s %-15s%n",
-						appointment[0], 
-						appointment[1], 
-						appointment[6], 
-						appointment[5], 
-						appointment[2], 
-						appointment[3]
-				);
+						appointment[0],
+						appointment[1],
+						appointment[6],
+						appointment[5],
+						appointment[2],
+						appointment[3]);
 			}
 
 			return appointmentList;
@@ -343,84 +332,82 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 	}
 
 	public List<String> viewPersonalSchedule(Doctor doctor) {
-	    DateTimeFormatter csvDateFormat1 = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-	    DateTimeFormatter csvDateFormat2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    DateTimeFormatter csvDateFormat3 = DateTimeFormatter.ofPattern("M/d/yyyy"); 
-	    DateTimeFormatter displayDateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy"); 
+		DateTimeFormatter csvDateFormat1 = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter csvDateFormat2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateTimeFormatter csvDateFormat3 = DateTimeFormatter.ofPattern("M/d/yyyy");
+		DateTimeFormatter displayDateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-	    try {
-	        Path path = Paths.get("data/Appointments.csv");
-	        List<String> lines = Files.readAllLines(path);
+		try {
+			Path path = Paths.get("data/Appointments.csv");
+			List<String> lines = Files.readAllLines(path);
 
-	        List<String[]> doctorAppointments = lines.stream()
-	                .skip(1)
-	                .map(line -> line.split(","))
-	                .filter(data -> data.length > 1 &&
-	                        data[1].trim().equalsIgnoreCase(doctor.getName()))
-	                .collect(Collectors.toList());
+			List<String[]> doctorAppointments = lines.stream()
+					.skip(1)
+					.map(line -> line.split(","))
+					.filter(data -> data.length > 1 &&
+							data[1].trim().equalsIgnoreCase(doctor.getName()))
+					.collect(Collectors.toList());
 
-	        if (doctorAppointments.isEmpty()) {
-	            System.out.println("No appointments found in your schedule.");
-	            return new ArrayList<>();
-	        }
+			if (doctorAppointments.isEmpty()) {
+				System.out.println("No appointments found in your schedule.");
+				return new ArrayList<>();
+			}
 
-	        System.out.println("\n=== Your Personal Schedule ===");
-	        System.out.printf("%-10s %-20s %-15s %-15s %-15s%n",
-	                "Appt ID", "Doctor Name", "Date", "Time", "Status");
-	        System.out.println("-".repeat(75));
+			System.out.println("\n=== Your Personal Schedule ===");
+			System.out.printf("%-10s %-20s %-15s %-15s %-15s%n",
+					"Appt ID", "Doctor Name", "Date", "Time", "Status");
+			System.out.println("-".repeat(75));
 
-	        List<String> scheduleDetails = new ArrayList<>();
+			List<String> scheduleDetails = new ArrayList<>();
 
-	        for (String[] appointment : doctorAppointments) {
-	            String formattedDate = appointment[2];
-	            try {
-	                LocalDate date;
-	                if (appointment[2].contains("/")) {
-	                    try {
-	                        date = LocalDate.parse(appointment[2], csvDateFormat1);
-	                    } catch (DateTimeParseException e) {
-	                        date = LocalDate.parse(appointment[2], csvDateFormat3);
-	                    }
-	                } else {
-	                    date = LocalDate.parse(appointment[2], csvDateFormat2);
-	                }
-	                formattedDate = date.format(displayDateFormat); 
-	            } catch (DateTimeParseException e) {
-	                System.out.println("Error parsing date: " + appointment[2]);
-	            }
+			for (String[] appointment : doctorAppointments) {
+				String formattedDate = appointment[2];
+				try {
+					LocalDate date;
+					if (appointment[2].contains("/")) {
+						try {
+							date = LocalDate.parse(appointment[2], csvDateFormat1);
+						} catch (DateTimeParseException e) {
+							date = LocalDate.parse(appointment[2], csvDateFormat3);
+						}
+					} else {
+						date = LocalDate.parse(appointment[2], csvDateFormat2);
+					}
+					formattedDate = date.format(displayDateFormat);
+				} catch (DateTimeParseException e) {
+					System.out.println("Error parsing date: " + appointment[2]);
+				}
 
-	            System.out.printf("%-10s %-20s %-15s %-15s %-15s%n",
-	                    appointment[0],
-	                    appointment[1], 
-	                    formattedDate,  
-	                    appointment[3], 
-	                    appointment.length > 4 ? appointment[4] : "N/A" 
-	            );
+				System.out.printf("%-10s %-20s %-15s %-15s %-15s%n",
+						appointment[0],
+						appointment[1],
+						formattedDate,
+						appointment[3],
+						appointment.length > 4 ? appointment[4] : "N/A");
 
-	            scheduleDetails.add(String.format("Appointment ID: %s, Date: %s, Time: %s, Status: %s",
-	                    appointment[0], formattedDate, appointment[3],
-	                    appointment.length > 4 ? appointment[4] : "N/A"));
-	        }
+				scheduleDetails.add(String.format("Appointment ID: %s, Date: %s, Time: %s, Status: %s",
+						appointment[0], formattedDate, appointment[3],
+						appointment.length > 4 ? appointment[4] : "N/A"));
+			}
 
-	        return scheduleDetails;
-	    } catch (IOException e) {
-	        System.out.println("Error retrieving personal schedule: " + e.getMessage());
-	        return new ArrayList<>();
-	    }
+			return scheduleDetails;
+		} catch (IOException e) {
+			System.out.println("Error retrieving personal schedule: " + e.getMessage());
+			return new ArrayList<>();
+		}
 	}
-
 
 	public void setAvailability(Doctor doctor, String date, String time) {
 		String doctorName = doctor.getName();
-	
+
 		if (!isSlotAvailable(doctorName, date, time)) {
 			System.out.println("An appointment slot already exists for this date and time.");
 			return;
 		}
-	
+
 		try {
 			Path path = Paths.get("data/Appointments.csv");
-	
+
 			if (!Files.exists(path) || Files.size(path) == 0) {
 				Files.createDirectories(path.getParent());
 				try (BufferedWriter initialWriter = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
@@ -428,30 +415,30 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 					initialWriter.newLine();
 				}
 			}
-	
+
 			List<String> lines = Files.readAllLines(path);
 			int appointmentId = getNextAppointmentId(path);
 			String newAppointment = String.format("%d,%s,%s,%s,Available", appointmentId, doctorName, date, time);
 			boolean added = false;
-			for (int i = 1; i < lines.size(); i++) { 
+			for (int i = 1; i < lines.size(); i++) {
 				if (lines.get(i).trim().isEmpty()) {
-					lines.set(i, newAppointment); 
+					lines.set(i, newAppointment);
 					added = true;
 					break;
 				}
 			}
-			
+
 			if (!added) {
-				lines.add(newAppointment); 
+				lines.add(newAppointment);
 			}
-	
+
 			try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE)) {
 				for (String line : lines) {
 					writer.write(line);
 					writer.newLine();
 				}
 			}
-	
+
 			System.out.println("Appointment slot created successfully!");
 			System.out.println("Appointment ID: " + appointmentId);
 		} catch (IOException e) {
@@ -459,59 +446,59 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 		}
 	}
 
-
 	private boolean isSlotAvailable(String doctorName, String date, String time) {
-	    Path path = Paths.get("data/Appointments.csv");
-	    DateTimeFormatter csvDateFormat1 = DateTimeFormatter.ofPattern("MM/dd/yyyy"); 
-	    DateTimeFormatter csvDateFormat2 = DateTimeFormatter.ofPattern("M/d/yyyy"); 
-	    DateTimeFormatter inputDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
-	    
-	    try {
-	        List<String> lines = Files.readAllLines(path);
-	        
-	        LocalDate inputDate = LocalDate.parse(date, inputDateFormat); 
+		Path path = Paths.get("data/Appointments.csv");
+		DateTimeFormatter csvDateFormat1 = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		DateTimeFormatter csvDateFormat2 = DateTimeFormatter.ofPattern("M/d/yyyy");
+		DateTimeFormatter inputDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	        boolean isHeader = true; 
-	        for (String line : lines) {
-	            if (isHeader) {
-	                isHeader = false; 
-	                continue;
-	            }
+		try {
+			List<String> lines = Files.readAllLines(path);
 
-	            String[] data = line.split(",");
-	            if (data.length > 4) {
-	                String existingDoctorName = data[1].trim();
-	                String existingDateStr = data[2].trim();
-	                String existingTime = data[3].trim();
-	                
-	                LocalDate existingDate;
-	                try {
-	                    if (existingDateStr.contains("/")) {
-	                        try {
-	                            existingDate = LocalDate.parse(existingDateStr, csvDateFormat1);
-	                        } catch (DateTimeParseException e) {
-	                            existingDate = LocalDate.parse(existingDateStr, csvDateFormat2);
-	                        }
-	                    } else {
-	                        existingDate = LocalDate.parse(existingDateStr, inputDateFormat);
-	                    }
-	                } catch (DateTimeParseException e) {
-	                    System.out.println("Error parsing date in CSV: " + existingDateStr);
-	                    continue; 
-	                }
+			LocalDate inputDate = LocalDate.parse(date, inputDateFormat);
 
-	                if (existingDoctorName.equalsIgnoreCase(doctorName) && 
-	                    existingDate.equals(inputDate) && 
-	                    existingTime.equals(time)) {
-	                    System.out.println("Duplicate found for Doctor: " + doctorName + ", Date: " + date + ", Time: " + time);
-	                    return false;
-	                }
-	            }
-	        }
-	    } catch (IOException e) {
-	        System.out.println("Error reading appointments file: " + e.getMessage());
-	    }
-	    return true; 
+			boolean isHeader = true;
+			for (String line : lines) {
+				if (isHeader) {
+					isHeader = false;
+					continue;
+				}
+
+				String[] data = line.split(",");
+				if (data.length > 4) {
+					String existingDoctorName = data[1].trim();
+					String existingDateStr = data[2].trim();
+					String existingTime = data[3].trim();
+
+					LocalDate existingDate;
+					try {
+						if (existingDateStr.contains("/")) {
+							try {
+								existingDate = LocalDate.parse(existingDateStr, csvDateFormat1);
+							} catch (DateTimeParseException e) {
+								existingDate = LocalDate.parse(existingDateStr, csvDateFormat2);
+							}
+						} else {
+							existingDate = LocalDate.parse(existingDateStr, inputDateFormat);
+						}
+					} catch (DateTimeParseException e) {
+						System.out.println("Error parsing date in CSV: " + existingDateStr);
+						continue;
+					}
+
+					if (existingDoctorName.equalsIgnoreCase(doctorName) &&
+							existingDate.equals(inputDate) &&
+							existingTime.equals(time)) {
+						System.out.println(
+								"Duplicate found for Doctor: " + doctorName + ", Date: " + date + ", Time: " + time);
+						return false;
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("Error reading appointments file: " + e.getMessage());
+		}
+		return true;
 	}
 
 	public static int getNextAppointmentId(Path path) {
@@ -521,7 +508,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 			}
 
 			return (int) Files.lines(path)
-					.skip(1) 
+					.skip(1)
 					.map(line -> {
 						try {
 							String[] parts = line.split("[,\t]");
@@ -531,7 +518,7 @@ public class DoctorAppointmentManager implements IAppointmentRepository {
 						}
 					})
 					.max(Integer::compare)
-					.orElse(0) + 1; 
+					.orElse(0) + 1;
 		} catch (IOException e) {
 			System.out.println("Error getting next appointment ID: " + e.getMessage());
 			return 1;

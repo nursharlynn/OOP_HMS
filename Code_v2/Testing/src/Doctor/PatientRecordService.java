@@ -30,22 +30,21 @@ public class PatientRecordService {
                 String[] patient = doctorPatients.get(i);
                 System.out.printf("%-5d %-15s %-20s %-15s%n",
                         i + 1,
-                        patient[5], 
-                        patient[6], 
-                        patient[2] 
-                );
+                        patient[5],
+                        patient[6],
+                        patient[2]);
             }
 
             System.out.print("\nEnter the number of the patient to view their medical record: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             if (choice < 1 || choice > doctorPatients.size()) {
                 System.out.println("Invalid selection.");
                 return;
             }
 
-            String patientId = doctorPatients.get(choice - 1)[5]; 
+            String patientId = doctorPatients.get(choice - 1)[5];
 
             PatientRecord record = recordManager.getPatientRecord(patientId);
 

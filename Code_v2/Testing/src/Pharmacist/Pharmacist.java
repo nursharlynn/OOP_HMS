@@ -59,7 +59,7 @@ public class Pharmacist extends User {
 				break;
 			case 7:
 				System.out.println("Logging out...");
-				return; 
+				return;
 			default:
 				System.out.println("Invalid choice. Please try again.");
 		}

@@ -17,9 +17,8 @@ public class PatientRecordManager {
                 .skip(1)
                 .map(line -> line.split(","))
                 .filter(data -> data.length > 4 &&
-                        data[1].trim().equalsIgnoreCase(doctorName) && 
-                        data[4].trim().equalsIgnoreCase("Confirmed") 
-                )
+                        data[1].trim().equalsIgnoreCase(doctorName) &&
+                        data[4].trim().equalsIgnoreCase("Confirmed"))
                 .collect(Collectors.toList());
     }
 
@@ -34,7 +33,7 @@ public class PatientRecordManager {
                         patientData[4], patientData[5], patientData[6], patientData[7]);
             }
         }
-        return null; 
+        return null;
     }
 
     public void displayPatientRecord(PatientRecord record) {
@@ -55,7 +54,7 @@ public class PatientRecordManager {
             List<String> outcomeLines = Files.readAllLines(outcomesPath);
 
             List<String[]> doctorPatients = outcomeLines.stream()
-                    .skip(1) 
+                    .skip(1)
                     .map(line -> line.split(","))
                     .filter(data -> data.length > 1 && data[1].trim().equalsIgnoreCase(doctor.getName()))
                     .collect(Collectors.toList());
@@ -72,13 +71,13 @@ public class PatientRecordManager {
             for (int i = 0; i < doctorPatients.size(); i++) {
                 String[] patient = doctorPatients.get(i);
                 System.out.printf("%-5d %-15s %-20s %-15s%n",
-                        i + 1, patient[2], patient[3], patient[4]); 
+                        i + 1, patient[2], patient[3], patient[4]);
             }
 
             Scanner scanner = new Scanner(System.in);
             System.out.print("\nEnter the number of the patient to update: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             if (choice < 1 || choice > doctorPatients.size()) {
                 System.out.println("Invalid selection.");
@@ -105,12 +104,12 @@ public class PatientRecordManager {
                     String newTreatmentInput = scanner.nextLine().trim();
 
                     String updatedLine = String.format("%s,%s,%s,%s,%s,%s,%s,%s",
-                            patientData[0], 
-                            patientData[1], 
-                            patientData[2], 
-                            patientData[3], 
-                            patientData[4], 
-                            patientData[5], 
+                            patientData[0],
+                            patientData[1],
+                            patientData[2],
+                            patientData[3],
+                            patientData[4],
+                            patientData[5],
                             newDiagnosisInput.isEmpty() ? (patientData.length > 6 ? patientData[6] : "")
                                     : newDiagnosisInput,
                             newTreatmentInput.isEmpty() ? (patientData.length > 7 ? patientData[7] : "")

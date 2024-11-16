@@ -13,16 +13,16 @@ public class LoginSystem {
     public LoginSystem() {
         users = new HashMap<>();
         userCredentials = new HashMap<>();
-        loadUserCredentials(); 
+        loadUserCredentials();
     }
 
     public void addUser(User user) {
-        users.put(user.getHospitalId(), user); 
+        users.put(user.getHospitalId(), user);
     }
 
     public User login(String userId, String password) {
         User user = users.get(userId);
-        String storedPassword = userCredentials.get(userId); 
+        String storedPassword = userCredentials.get(userId);
 
         if (user != null && storedPassword != null && storedPassword.equals(password)) {
             return user;

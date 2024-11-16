@@ -207,13 +207,12 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                         data[4].trim().equalsIgnoreCase("Available")) {
 
                     lines.set(i, String.format("%s,%s,%s,%s,Booked,%s,%s",
-                            data[0], 
-                            data[1], 
-                            data[2], 
-                            data[3], 
-                            patient.getHospitalId(), 
-                            patient.getName() 
-                    ));
+                            data[0],
+                            data[1],
+                            data[2],
+                            data[3],
+                            patient.getHospitalId(),
+                            patient.getName()));
 
                     appointmentFound = true;
                     break;
@@ -234,8 +233,8 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
     @Override
     public List<String[]> viewAvailableSlots() {
         List<String[]> availableAppointments = new ArrayList<>();
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy"); 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         try (BufferedReader br = new BufferedReader(new FileReader("data/Appointments.csv"))) {
             String line;
@@ -243,7 +242,7 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                     "Appt ID", "Doctor Name", "Date", "Time", "Status");
             System.out.println("-".repeat(75));
 
-            br.readLine(); 
+            br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
@@ -253,7 +252,7 @@ public class PatientAppointmentManager implements IAppointmentsHandler {
                     try {
                         formattedDate = outputFormat.format(inputFormat.parse(data[2]));
                     } catch (ParseException e) {
-                        formattedDate = data[2]; 
+                        formattedDate = data[2];
                     }
 
                     System.out.printf("%-10s %-20s %-15s %-15s %-15s%n",

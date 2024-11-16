@@ -1,7 +1,7 @@
 package User;
 
 public abstract class User {
-    private String hospitalId; 
+    private String hospitalId;
     private String password;
     private String name;
     private String role;
@@ -14,7 +14,7 @@ public abstract class User {
         this.password = password;
         this.name = name;
         this.gender = gender;
-        this.role = role; 
+        this.role = role;
         this.age = age;
     }
 

@@ -41,13 +41,13 @@ public class DataLoader {
                 String name = data[1].trim();
                 String role = data[2].trim();
                 String gender = data[3].trim();
-                int age = Integer.parseInt(data[4].trim()); 
+                int age = Integer.parseInt(data[4].trim());
 
-                 User user = createUserByRole(staffId, name, role, gender, age);
-                 if (user != null) {
+                User user = createUserByRole(staffId, name, role, gender, age);
+                if (user != null) {
                     loginSystem.addUser(user);
                     saveUserCredentials(staffId);
-                 }
+                }
             }
         } catch (IOException e) {
             System.err.println("Error reading staff file: " + e.getMessage());
@@ -123,7 +123,7 @@ public class DataLoader {
         try {
             Path medicinePath = Paths.get("data/Medicine_List.csv");
             return Files.lines(medicinePath)
-                    .skip(1) 
+                    .skip(1)
                     .map(line -> line.split(",")[0].trim())
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -168,12 +168,12 @@ public class DataLoader {
 
     public void saveStaffList(List<User> staffList) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(staffFilePath))) {
-            writer.write("Staff ID,Name,Role,Gender,Age\n"); 
+            writer.write("Staff ID,Name,Role,Gender,Age\n");
             for (User staff : staffList) {
                 writer.write(String.format("%s,%s,%s,%s,%d%n",
                         staff.getHospitalId(),
                         staff.getName(),
-                        staff.getRole(), 
+                        staff.getRole(),
                         staff.getGender(),
                         staff.getAge()));
             }
@@ -184,26 +184,26 @@ public class DataLoader {
 
     public List<User> getAllStaff() {
         List<User> staffList = new ArrayList<>();
-        String staffFilePath = "data/Staff_List.csv"; 
+        String staffFilePath = "data/Staff_List.csv";
 
         try (BufferedReader br = new BufferedReader(new FileReader(staffFilePath))) {
             String line;
             br.readLine();
 
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(","); 
+                String[] data = line.split(",");
                 if (data.length < 5)
-                    continue; 
+                    continue;
 
                 String staffId = data[0].trim();
                 String name = data[1].trim();
                 String role = data[2].trim();
                 String gender = data[3].trim();
-                int age = Integer.parseInt(data[4].trim()); 
+                int age = Integer.parseInt(data[4].trim());
 
                 User user = createUserByRole(staffId, name, role, gender, age);
                 if (user != null) {
-                    staffList.add(user); 
+                    staffList.add(user);
                 }
             }
         } catch (IOException e) {
@@ -214,18 +214,18 @@ public class DataLoader {
     }
 
     public String getStaffFilePath() {
-        return staffFilePath; 
+        return staffFilePath;
     }
 
     public void updatePatientContact(String patientId, String newContact) throws IOException {
         Path path = Path.of(patientFilePath);
         List<String> lines = Files.readAllLines(path);
 
-        for (int i = 1; i < lines.size(); i++) { 
+        for (int i = 1; i < lines.size(); i++) {
             String[] data = lines.get(i).split(",");
             if (data[0].trim().equals(patientId)) {
-                data[5] = newContact; 
-                lines.set(i, String.join(",", data)); 
+                data[5] = newContact;
+                lines.set(i, String.join(",", data));
                 break;
             }
         }
@@ -240,17 +240,17 @@ public class DataLoader {
     public void saveUserCredentials(String userId) {
         String credentialsFilePath = "data/UserCredentials.csv";
         Set<String> existingUserIds = new HashSet<>();
-    
+
         try {
             File credentialsFile = new File(credentialsFilePath);
             File parentDir = credentialsFile.getParentFile();
-            
+
             if (parentDir != null && !parentDir.exists()) {
                 parentDir.mkdirs();
             }
-    
+
             boolean fileExists = credentialsFile.exists();
-    
+
             if (fileExists) {
                 List<String> lines = Files.readAllLines(credentialsFile.toPath());
                 for (String line : lines) {
@@ -264,15 +264,15 @@ public class DataLoader {
                     writer.write("HospitalID,Password\n");
                 }
             }
-    
+
             if (existingUserIds.contains(userId)) {
                 return;
             }
-    
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(credentialsFilePath, true))) {
                 writer.write(String.format("%s,password%n", userId));
             }
-    
+
         } catch (IOException e) {
             System.err.println("Error saving user credentials: " + e.getMessage());
         }
@@ -283,20 +283,20 @@ public class DataLoader {
         try {
             List<String> lines = Files.readAllLines(Paths.get(credentialsFilePath));
             List<String> updatedLines = new ArrayList<>();
-    
+
             for (String line : lines) {
                 String[] data = line.split(",");
                 if (data.length > 0 && !data[0].trim().equals(userId)) {
                     updatedLines.add(line);
                 }
             }
-    
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(credentialsFilePath))) {
                 for (String updatedLine : updatedLines) {
                     writer.write(updatedLine + System.lineSeparator());
                 }
             }
-    
+
         } catch (IOException e) {
             System.err.println("Error removing user credentials: " + e.getMessage());
         }

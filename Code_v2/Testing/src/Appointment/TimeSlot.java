@@ -2,10 +2,8 @@ package Appointment;
 
 public class TimeSlot {
 
-  
     private Status status;
 
-    
     public Status getStatus() {
         return this.status;
     }

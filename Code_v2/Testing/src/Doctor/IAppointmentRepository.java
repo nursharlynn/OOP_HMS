@@ -11,6 +11,4 @@ public interface IAppointmentRepository {
 
     ArrayList<Appointment> viewUpcomingAppointments(Doctor doctor);
 
-    
-
 }

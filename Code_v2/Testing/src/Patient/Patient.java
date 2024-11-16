@@ -77,7 +77,7 @@ public class Patient extends User {
                 break;
             case 9:
                 System.out.println("Logging out...");
-                return; 
+                return;
             default:
                 System.out.println("Invalid choice. Please try again.");
         }
@@ -146,24 +146,24 @@ public class Patient extends User {
 
     public void updatePersonalInformation(LoginSystem loginSystem) {
         System.out.println("\n=== Update Personal Information ===");
-    
+
         System.out.println("Current Contact: " + this.contact);
-    
+
         System.out.print("Enter new contact (press enter to keep current): ");
         String newContact = scanner.nextLine().trim();
-    
+
         if (!newContact.isEmpty()) {
             this.contact = newContact;
             System.out.println("Contact updated successfully.");
-    
-            DataLoader dataLoader = new DataLoader(loginSystem); 
+
+            DataLoader dataLoader = new DataLoader(loginSystem);
             try {
                 dataLoader.updatePatientContact(this.getPatientID(), newContact);
             } catch (IOException e) {
                 System.out.println("Error updating patient contact in the file: " + e.getMessage());
             }
         }
-    
+
         System.out.println("Personal information update completed.");
     }
 

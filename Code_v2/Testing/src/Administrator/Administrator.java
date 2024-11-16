@@ -97,7 +97,7 @@ public class Administrator extends User {
 
         switch (choice) {
             case 1:
-                staffManager.addStaffMember(dataLoader); 
+                staffManager.addStaffMember(dataLoader);
                 break;
             case 2:
                 staffManager.updateStaffMember(staffList, dataLoader);

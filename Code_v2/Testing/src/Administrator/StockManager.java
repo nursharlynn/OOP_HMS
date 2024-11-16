@@ -14,7 +14,7 @@ public class StockManager {
     }
 
     public void manageStockLevels() {
-        List<Medicine> medicines = dataLoader.getAllMedicines(); 
+        List<Medicine> medicines = dataLoader.getAllMedicines();
 
         if (medicines.isEmpty()) {
             System.out.println("No medicines available.");

@@ -23,8 +23,8 @@ public class StaffManager implements IStaffManagement {
     }
 
     public void viewStaff() {
-        DataLoader dataLoader = new DataLoader(loginSystem); 
-        List<User> staffList = dataLoader.getAllStaff(); 
+        DataLoader dataLoader = new DataLoader(loginSystem);
+        List<User> staffList = dataLoader.getAllStaff();
 
         System.out.println("\n--- View Staff ---");
         if (staffList.isEmpty()) {
@@ -36,45 +36,45 @@ public class StaffManager implements IStaffManagement {
             for (User staff : staffList) {
 
                 System.out.printf("%-15s %-20s %-10s %-10s %-5d%n",
-                        staff.getHospitalId(), 
-                        staff.getName(), 
+                        staff.getHospitalId(),
+                        staff.getName(),
                         staff.getRole(),
-                        staff.getGender(), 
-                        staff.getAge()); 
+                        staff.getGender(),
+                        staff.getAge());
             }
         }
     }
 
     public void addStaffMember(DataLoader dataLoader) {
         Scanner scanner = new Scanner(System.in);
-    
+
         System.out.print("Enter Staff ID: ");
         String staffId = scanner.nextLine().trim();
-    
+
         List<User> staffList = dataLoader.getAllStaff();
-    
-        for (User  staff : staffList) {
+
+        for (User staff : staffList) {
             if (staff.getHospitalId().equals(staffId)) {
                 System.out.println("Staff ID already exists. Please enter a unique Staff ID.");
                 return;
             }
         }
-    
+
         System.out.print("Enter Name: ");
         String name = scanner.nextLine().trim();
-    
+
         System.out.print("Enter Role (Doctor/Pharmacist/Administrator): ");
         String role = scanner.nextLine().trim();
-    
+
         if (!role.equalsIgnoreCase("Doctor") && !role.equalsIgnoreCase("Pharmacist")
                 && !role.equalsIgnoreCase("Administrator")) {
             System.out.println("Invalid role. Staff member not added.");
             return;
         }
-    
+
         System.out.print("Enter Gender: ");
         String gender = scanner.nextLine().trim();
-    
+
         System.out.print("Enter Age: ");
         int age = 0;
         try {
@@ -85,7 +85,7 @@ public class StaffManager implements IStaffManagement {
             scanner.nextLine();
             return;
         }
-    
+
         User newStaffMember = createUserByRole(staffId, name, gender, age, role);
         if (newStaffMember != null) {
             staffList.add(newStaffMember);
@@ -99,8 +99,8 @@ public class StaffManager implements IStaffManagement {
 
     public void addStaff(User newUser) {
         List<User> staffList = dataLoader.getAllStaff();
-        staffList.add(newUser); 
-        saveStaffList(staffList); 
+        staffList.add(newUser);
+        saveStaffList(staffList);
     }
 
     public User createUserByRole(String hospitalId, String name, String gender, int age, String role) {
@@ -112,7 +112,7 @@ public class StaffManager implements IStaffManagement {
             case "administrator":
                 return new Administrator(hospitalId, "password", name, gender, age);
             default:
-                return null; 
+                return null;
         }
     }
 
@@ -191,18 +191,18 @@ public class StaffManager implements IStaffManagement {
     }
 
     public void updateStaff(User updatedUser) {
-        List<User> staffList = dataLoader.getAllStaff(); 
-        saveStaffList(staffList); 
+        List<User> staffList = dataLoader.getAllStaff();
+        saveStaffList(staffList);
     }
 
     public void removeStaff(User userToRemove) {
-        List<User> staffList = dataLoader.getAllStaff(); 
-        staffList.remove(userToRemove); 
-        saveStaffList(staffList); 
+        List<User> staffList = dataLoader.getAllStaff();
+        staffList.remove(userToRemove);
+        saveStaffList(staffList);
     }
 
     public void saveStaffList(List<User> staffList) {
-        String staffFilePath = dataLoader.getStaffFilePath(); 
+        String staffFilePath = dataLoader.getStaffFilePath();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(staffFilePath, false))) {
             writer.write("Staff ID,Name,Role,Gender,Age\n");
             for (User staff : staffList) {

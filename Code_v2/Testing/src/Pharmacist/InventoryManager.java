@@ -43,23 +43,23 @@ public class InventoryManager implements IInventoryManager {
     public void submitReplenishmentRequest(Scanner scanner, String pharmacistId, String pharmacistName) {
         System.out.print("Enter the name of the medicine to request replenishment: ");
         String medicineName = scanner.nextLine().trim();
-    
+
         int requestAmount = 0;
         boolean validInput = false;
-    
+
         while (!validInput) {
             System.out.print("Enter the amount to request (must be greater than 0): ");
             try {
                 requestAmount = scanner.nextInt();
-                scanner.nextLine(); 
+                scanner.nextLine();
                 if (requestAmount > 0) {
-                    validInput = true; 
+                    validInput = true;
                 } else {
                     System.out.println("Please enter a number greater than 0.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input for request amount. Please enter a valid number.");
-                scanner.nextLine(); 
+                scanner.nextLine();
             }
         }
 
