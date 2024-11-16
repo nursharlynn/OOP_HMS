@@ -26,6 +26,8 @@ public class HMSApp {
 
     public void start() {
         while (true) {
+            loginSystem.loadUserCredentials();
+
             System.out.println("\nWelcome to Hospital Management System");
             System.out.println("1. Login");
             System.out.println("2. Exit");
@@ -75,7 +77,7 @@ public class HMSApp {
         if (currentUser != null) {
             System.out.println("Login successful!");
 
-            if (currentUser.isFirstLogin()) {
+            if (password.equals("password")) {
                 passwordManager.handleFirstTimeLogin(currentUser);
             }
 

@@ -46,6 +46,7 @@ public class DataLoader {
                  User user = createUserByRole(staffId, name, role, gender, age);
                  if (user != null) {
                     loginSystem.addUser(user);
+                    saveUserCredentials(staffId);
                  }
             }
         } catch (IOException e) {
@@ -91,6 +92,7 @@ public class DataLoader {
                 patient.setTreatment(treatment);
 
                 loginSystem.addUser(patient);
+                saveUserCredentials(patientId);
             }
         } catch (IOException e) {
             System.err.println("Error reading patient file: " + e.getMessage());
@@ -232,6 +234,71 @@ public class DataLoader {
             for (String line : lines) {
                 writer.write(line + System.lineSeparator());
             }
+        }
+    }
+
+    public void saveUserCredentials(String userId) {
+        String credentialsFilePath = "data/UserCredentials.csv";
+        Set<String> existingUserIds = new HashSet<>();
+    
+        try {
+            File credentialsFile = new File(credentialsFilePath);
+            File parentDir = credentialsFile.getParentFile();
+            
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+    
+            boolean fileExists = credentialsFile.exists();
+    
+            if (fileExists) {
+                List<String> lines = Files.readAllLines(credentialsFile.toPath());
+                for (String line : lines) {
+                    String[] data = line.split(",");
+                    if (data.length == 2) {
+                        existingUserIds.add(data[0].trim());
+                    }
+                }
+            } else {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(credentialsFilePath))) {
+                    writer.write("HospitalID,Password\n");
+                }
+            }
+    
+            if (existingUserIds.contains(userId)) {
+                return;
+            }
+    
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(credentialsFilePath, true))) {
+                writer.write(String.format("%s,password%n", userId));
+            }
+    
+        } catch (IOException e) {
+            System.err.println("Error saving user credentials: " + e.getMessage());
+        }
+    }
+
+    public void removeUserCredentials(String userId) {
+        String credentialsFilePath = "data/UserCredentials.csv";
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(credentialsFilePath));
+            List<String> updatedLines = new ArrayList<>();
+    
+            for (String line : lines) {
+                String[] data = line.split(",");
+                if (data.length > 0 && !data[0].trim().equals(userId)) {
+                    updatedLines.add(line);
+                }
+            }
+    
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(credentialsFilePath))) {
+                for (String updatedLine : updatedLines) {
+                    writer.write(updatedLine + System.lineSeparator());
+                }
+            }
+    
+        } catch (IOException e) {
+            System.err.println("Error removing user credentials: " + e.getMessage());
         }
     }
 

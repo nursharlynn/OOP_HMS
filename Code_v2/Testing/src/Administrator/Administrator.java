@@ -97,33 +97,7 @@ public class Administrator extends User {
 
         switch (choice) {
             case 1:
-                try {
-                    System.out.print("Enter staff role (Doctor/Pharmacist/Administrator): ");
-                    String role = scanner.nextLine();
-
-                    System.out.print("Enter Hospital ID: ");
-                    String hospitalId = scanner.nextLine();
-
-                    System.out.print("Enter Name: ");
-                    String name = scanner.nextLine();
-
-                    System.out.print("Enter Gender: ");
-                    String gender = scanner.nextLine();
-
-                    System.out.print("Enter Age: ");
-                    int age = scanner.nextInt();
-                    scanner.nextLine();
-
-                    User newUser = staffManager.createUserByRole(hospitalId, name, gender, age, role);
-                    if (newUser != null) {
-                        staffManager.addStaff(newUser);
-                        System.out.println("Staff member added successfully.");
-                    } else {
-                        System.out.println("Invalid role entered. Staff member not added.");
-                    }
-                } catch (Exception e) {
-                    System.out.println("An error occurred: " + e.getMessage());
-                }
+                staffManager.addStaffMember(dataLoader); 
                 break;
             case 2:
                 staffManager.updateStaffMember(staffList, dataLoader);

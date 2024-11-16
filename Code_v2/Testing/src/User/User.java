@@ -76,4 +76,10 @@ public abstract class User {
         this.age = age;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Staff ID: %s, Name: %s, Role: %s, Gender: %s, Age: %d",
+                hospitalId, name, role, gender, age);
+    }
+
 }

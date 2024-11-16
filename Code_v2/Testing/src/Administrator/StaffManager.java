@@ -47,34 +47,34 @@ public class StaffManager implements IStaffManagement {
 
     public void addStaffMember(DataLoader dataLoader) {
         Scanner scanner = new Scanner(System.in);
-
+    
         System.out.print("Enter Staff ID: ");
         String staffId = scanner.nextLine().trim();
-
+    
         List<User> staffList = dataLoader.getAllStaff();
-
-        for (User staff : staffList) {
+    
+        for (User  staff : staffList) {
             if (staff.getHospitalId().equals(staffId)) {
                 System.out.println("Staff ID already exists. Please enter a unique Staff ID.");
                 return;
             }
         }
-
+    
         System.out.print("Enter Name: ");
         String name = scanner.nextLine().trim();
-
+    
         System.out.print("Enter Role (Doctor/Pharmacist/Administrator): ");
         String role = scanner.nextLine().trim();
-
+    
         if (!role.equalsIgnoreCase("Doctor") && !role.equalsIgnoreCase("Pharmacist")
                 && !role.equalsIgnoreCase("Administrator")) {
             System.out.println("Invalid role. Staff member not added.");
             return;
         }
-
+    
         System.out.print("Enter Gender: ");
         String gender = scanner.nextLine().trim();
-
+    
         System.out.print("Enter Age: ");
         int age = 0;
         try {
@@ -85,12 +85,13 @@ public class StaffManager implements IStaffManagement {
             scanner.nextLine();
             return;
         }
-
+    
         User newStaffMember = createUserByRole(staffId, name, gender, age, role);
         if (newStaffMember != null) {
-            staffList.add(newStaffMember); 
-            dataLoader.saveStaffList(staffList); 
+            staffList.add(newStaffMember);
+            dataLoader.saveStaffList(staffList);
             System.out.println("Staff member added successfully.");
+            dataLoader.saveUserCredentials(staffId);
         } else {
             System.out.println("Error adding staff member.");
         }
@@ -179,9 +180,11 @@ public class StaffManager implements IStaffManagement {
         int rowToRemove = scanner.nextInt() - 1;
 
         if (rowToRemove >= 0 && rowToRemove < staffList.size()) {
+            User staffToRemove = staffList.get(rowToRemove);
             staffList.remove(rowToRemove);
             dataLoader.saveStaffList(staffList);
             System.out.println("Staff member removed successfully.");
+            dataLoader.removeUserCredentials(staffToRemove.getHospitalId());
         } else {
             System.out.println("Invalid selection.");
         }
