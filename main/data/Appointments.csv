@@ -1,1 +1,4 @@
 AppointmentID,DoctorName,Date,Time,Status,PatientID,PatientName
+1,John Smith,2024-12-12,12:12,Confirmed,P1001,Alice Brown
+2,John Smith,2024-11-11,11:11,Available,,
+3,John Smith,2024-10-10,10:10,Cancelled,P1001,Alice Brown
