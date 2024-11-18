@@ -3,4 +3,6 @@ Hospital Management System (HMS) is a Java console application project that uses
 
 The initial password for every user is "password"
 
+Run application from HMSApp
+
 The HMS App must run on a folder on its own (basically it is the first folder) for the HMS App to run.
